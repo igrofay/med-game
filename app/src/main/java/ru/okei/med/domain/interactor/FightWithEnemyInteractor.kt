@@ -26,7 +26,10 @@ class FightWithEnemyInteractor(
     private val battleRepository: BattleRepository
 ) {
     private val scope = CoroutineScope(
-        Dispatchers.IO )
+        Dispatchers.IO + CoroutineExceptionHandler{
+            context, exception-> Log.e(context.toString(), exception.toString())
+        }
+    )
     private var socketSession: DefaultClientWebSocketSession? = null
     private lateinit var enemyFound: EnemyFound
     private lateinit var newRatingTable: NewRatingTable
@@ -72,7 +75,6 @@ class FightWithEnemyInteractor(
             for (message in incoming) {
                 message as? Frame.Text ?: continue
                 tokenRoom = message.readText()
-                println(tokenRoom)
                 break
             }
             enemyFound.invoke()
@@ -80,7 +82,7 @@ class FightWithEnemyInteractor(
             socketSession = null
             scope.launch { connectionRoom() }
         } catch (e: Exception) {
-            Log.e("SearchForEnemyController/connectionSearchingEnemy", e.message.toString())
+            Log.e("SearchForEnemyController.connectionSearchingEnemy", e.message.toString())
         }
     }
 
@@ -93,7 +95,7 @@ class FightWithEnemyInteractor(
                     readData(message)
                 }
             }catch (e:Exception){
-                Log.e("SearchForEnemyController/connectionRoom", e.message.toString())
+                Log.e("SearchForEnemyController.connectionRoom", e.message.toString())
             }
         }
     }
@@ -115,7 +117,7 @@ class FightWithEnemyInteractor(
                 }
             }
         }catch (e:Throwable){
-            Log.e("SearchForEnemyController/readData", e.message.toString())
+            Log.e("SearchForEnemyController.readData", e.message.toString())
         }
     }
 

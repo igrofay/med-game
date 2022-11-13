@@ -24,23 +24,21 @@ class BattleRepositoryImpl(
         connection: suspend DefaultClientWebSocketSession.() -> Unit
     ) {
         client.webSocket(
-            //method = HttpMethod.Post,
+            method = HttpMethod.Get,
             path = "/main",
             request = {
                 header(HttpHeaders.Authorization, tokenAccess)
-//                header(HttpHeaders.Connection,HttpHeaders.Upgrade)
-//                header(HttpHeaders.Upgrade, "websocket")
-                contentType(ContentType.Application.Json)
-                setBody(
+                url.protocol = URLProtocol.WS
+            },
+            block = {
+                sendSerialized(
                     SettingRoomBody(
                         nameModule = module,
                         nameDepartment = department,
-                        type = TypeBattle.Simpler
-                    )
+                        type = TypeBattle.Simpler,)
                 )
-                url.protocol = URLProtocol.WS
-            },
-            block = connection
+                connection()
+            }
         )
     }
 
@@ -50,21 +48,21 @@ class BattleRepositoryImpl(
         connection: suspend DefaultClientWebSocketSession.() -> Unit
     ) {
         client.webSocket(
-            //method = HttpMethod.Post,
+            method = HttpMethod.Get,
             path = "/main",
             request = {
                 header(HttpHeaders.Authorization, tokenAccess)
-                contentType(ContentType.Application.Json)
-                setBody(
+                url.protocol = URLProtocol.WS
+            },
+            block = {
+                sendSerialized(
                     SettingRoomBody(
                         nameModule = null,
                         nameDepartment = department,
-                        type = TypeBattle.Rating
-                    )
+                        type = TypeBattle.Simpler,)
                 )
-                //url.protocol = URLProtocol.WS
-            },
-            block = connection
+                connection()
+            }
         )
     }
 
