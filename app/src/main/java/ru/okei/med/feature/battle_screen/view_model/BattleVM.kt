@@ -7,12 +7,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import ru.okei.med.domain.model.Errors
+import ru.okei.med.domain.interactor.FightWithEnemyInteractor
 import ru.okei.med.domain.model.QuestionBody
-import ru.okei.med.domain.model.TypeBattle.*
+import ru.okei.med.domain.model.StateGame
+import ru.okei.med.domain.model.TypeBattle
+import ru.okei.med.domain.model.TypeBattle.Rating
+import ru.okei.med.domain.model.TypeBattle.Simpler
 import ru.okei.med.domain.repos.BattleRepository
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.battle_screen.model.BattleEvent
@@ -22,46 +25,49 @@ import javax.inject.Inject
 @HiltViewModel
 class BattleVM @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val battleRepository: BattleRepository
+    private val battleRepository: BattleRepository,
+    private val fightWithEnemy: FightWithEnemyInteractor
 ) : ViewModel(), EventBase<BattleEvent> {
+    private var currentQuestion = 0
+    private val department = "Anatomy"
+    private val typeBattle = TypeBattle.valueOf(savedStateHandle.get<String>("typeBattle")!!)
     private val _state = mutableStateOf<BattleState>(BattleState.Loading())
     val state: State<BattleState> get() = _state
 
     init {
-        _state.value = BattleState.QuestionForm(
-            QuestionBody(
-                QuestionBody.Type.Image,
-                "Какая мышца в теле человека является самой крупной?",
-                "Какая мышца в теле человека является самой крупной?",
-                "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg",
-                100,
-                QuestionBody.AnswerOption(QuestionBody.Type.Text,"Плечевой",null),
-                listOf(
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Плечевой",null),
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Спиной",null),
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Черепной",null),
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Кистевой",null)
+        fightWithEnemy.init(
+            department,
+            typeBattle,
+            enemyFound = {
+                _state.value = BattleState.Loading(BattleState.Loading.Load.EnemyConnection)
+                },
+            newQuestionCameUp = {  question ->
+                _state.value = BattleState.QuestionForm(
+                    question = question,
+                    userAnswer = null,
+                    currentQuestion = ++currentQuestion
                 )
-            ), null,
-            15,
-            5
+            },
+            newRatingTable = { rating ->
+                _state.value = BattleState.ViewRatingGame(rating)
+            }
         )
-//        try {
-//            val strTypeBattle = savedStateHandle.get<String>("typeBattle")!!
-//            when(valueOf(strTypeBattle)){
-//                Simpler -> {
-//                    viewModelScope.launch {
-//                        val modules = battleRepository.getModules()
-//                        _state.value = BattleState.ModuleSelection(modules)
-//                    }
-//                }
-//                Rating -> {
-//                    _state.value = BattleState.FindingEnemy
-//                }
-//            }
-//        }catch (e:Throwable){errorProcessing(e)}
+        when(typeBattle){
+            Simpler -> {
+                viewModelScope.launch {
+                    runCatching {
+                        battleRepository.getModules(department)
+                    }.onSuccess { modules ->
+                        _state.value = BattleState.ModuleSelection(modules)
+                    }.onFailure(::errorProcessing)
+                }
+            }
+            Rating -> {
+                fightWithEnemy.search()
+                _state.value = BattleState.FindingEnemy
+            }
+        }
     }
-
     private fun errorProcessing(e:Throwable){
         when(e){
             else ->{
@@ -73,12 +79,60 @@ class BattleVM @Inject constructor(
     override fun onEvent(event: BattleEvent) {
         when(event){
             is BattleEvent.Reply -> {
+                fightWithEnemy.reply(event.answerOption)
                 _state.value = (_state.value as BattleState.QuestionForm).copy(userAnswer = event.answerOption)
             }
             BattleEvent.CancelSearch -> {
-
+                fightWithEnemy.close()
+            }
+            is BattleEvent.ChosenModule -> {
+                fightWithEnemy.search(event.module)
+                _state.value = BattleState.FindingEnemy
             }
         }
     }
+
+    private fun test1(){
+                _state.value = BattleState.QuestionForm(
+            QuestionBody(
+                QuestionBody.Type.Text,
+                "Какая мышца в теле человека является самой крупной?",
+                "Какая мышца в теле человека является самой крупной?",
+                "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg",
+                100,
+                QuestionBody.AnswerOption(QuestionBody.Type.Text,"Plech","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                listOf(
+                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Плечевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Спиной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Черепной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Кистевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg")
+                )
+            ), null,
+            5
+        )
+    }
+    private fun test2(){
+        _state.value = BattleState.ViewRatingGame(
+            StateGame(
+                isEndGame = false,
+                rating = listOf(
+                    StateGame.GamePointsRating("oleg",
+                        "https://assets.gq.ru/photos/5d9f4654cd52870008328b53/master/w_1600,c_limit/05.jpg",
+                        5,
+                        10,
+                        5,
+                    ),
+                    StateGame.GamePointsRating("Максим гудеев", "", 9, 10, 3,)
+                ),
+                "Максим гудеев"
+            )
+        )
+    }
+
+    override fun onCleared() {
+        fightWithEnemy.close()
+        super.onCleared()
+    }
+
 
 }

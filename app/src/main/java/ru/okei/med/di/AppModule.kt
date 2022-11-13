@@ -12,6 +12,7 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.cache.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
@@ -34,6 +35,9 @@ object AppModule {
             install(HttpRequestRetry) {
                 retryOnServerErrors(maxRetries = 5)
                 exponentialDelay()
+            }
+            install(WebSockets) {
+                contentConverter = KotlinxWebsocketSerializationConverter(Json)
             }
             install(HttpCache)
             install(ContentNegotiation) {

@@ -29,18 +29,16 @@ import ru.okei.med.feature.widget.CustomButton
 @Composable
 fun Loading(
     loadState: BattleState.Loading.Load,
-    cancellation: ()->Unit
 ) {
     when(LocalConfiguration.current.orientation){
-        Configuration.ORIENTATION_PORTRAIT -> VerticalLoading(loadState,cancellation)
-        else -> HorizontalLoading(loadState,cancellation)
+        Configuration.ORIENTATION_PORTRAIT -> VerticalLoading(loadState)
+        else -> HorizontalLoading(loadState,)
     }
 }
 
 @Composable
 private fun VerticalLoading(
     loadState: BattleState.Loading.Load,
-    cancellation: ()->Unit
 ) {
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize(),
@@ -112,7 +110,6 @@ private fun VerticalLoading(
 @Composable
 fun HorizontalLoading(
     loadState: BattleState.Loading.Load,
-    cancellation: ()->Unit
 ) {
     Row {
         BoxWithConstraints(

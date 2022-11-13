@@ -1,6 +1,7 @@
 package ru.okei.med.feature.battle_screen.model
 
 import ru.okei.med.domain.model.QuestionBody
+import ru.okei.med.domain.model.StateGame
 
 sealed class BattleState {
     class ModuleSelection(val modules: List<String>): BattleState()
@@ -13,7 +14,7 @@ sealed class BattleState {
     data class QuestionForm(
         val question: QuestionBody,
         val userAnswer: QuestionBody.AnswerOption?,
-        val numberOfQuestions:Int,
         val currentQuestion:Int
     ):BattleState()
+    data class ViewRatingGame(val statusGame: StateGame) :BattleState()
 }

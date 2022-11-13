@@ -15,6 +15,7 @@ class Timer(second: Int) {
                 }
                 delay(1_000)
             }
+            scope.cancel()
         }
     }
     private val timeString = mutableStateOf("")

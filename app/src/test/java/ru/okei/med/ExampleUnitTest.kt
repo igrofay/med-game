@@ -4,6 +4,9 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import ru.okei.med.domain.model.AchievementBody
+import ru.okei.med.domain.model.TokensBody
+import ru.okei.med.domain.repos.AuthRepository
+import ru.okei.med.domain.repos.TokenRepository
 import ru.okei.med.utils.CheckSpelling
 
 /**
@@ -20,22 +23,46 @@ class ExampleUnitTest {
     @Test
     fun achievementBodyCheckVariables(){
         println(
-            AchievementBody(
-                countPoint = 9999
-            ).textProgress
+            AchievementBody(countPoint = 9999).textProgress
         )
     }
     @Test
     fun checkSpellingName(){
-        assertEquals(false,CheckSpelling.check("", CheckSpelling.Type.NameAndSecondeName))
-        assertEquals(true,CheckSpelling.check("Гриша Петров", CheckSpelling.Type.NameAndSecondeName))
-        assertEquals(false,CheckSpelling.check("Гриша", CheckSpelling.Type.NameAndSecondeName))
+        assertEquals(false,CheckSpelling.check("", CheckSpelling.Type.NameAndSecondName))
+        assertEquals(true,CheckSpelling.check("Гриша Петров", CheckSpelling.Type.NameAndSecondName))
+        assertEquals(false,CheckSpelling.check("Гриша", CheckSpelling.Type.NameAndSecondName))
+        assertEquals(false,CheckSpelling.check("Гриша  ", CheckSpelling.Type.NameAndSecondName))
+    }
+    private val tokenRepository = object : TokenRepository{
+        override var refresh: String
+            get() = ""
+            set(value) {}
+        override var access: String
+            get() = ""
+            set(value) {}
+    }
+    private val authRepository = object :AuthRepository{
+        override suspend fun signIn(email: String, password: String): TokensBody {
+            TODO("Not yet implemented")
+        }
+        override suspend fun signUp(
+            email: String,
+            nickname: String,
+            password: String
+        ): TokensBody {
+            return TokensBody("","")
+        }
+        override suspend fun restoreSession(refreshToken: String): TokensBody {
+            TODO("Not yet implemented")
+        }
+
     }
     @Test
-    fun checkSpellingEmail(){
-        println(CheckSpelling.check("1@s.", CheckSpelling.Type.Email))
-//        assertEquals(false,CheckSpelling.check("", CheckSpelling.Type.Email))
-//        assertEquals(false,CheckSpelling.check("@ad.wd", CheckSpelling.Type.Email))
-//        assertEquals(false,CheckSpelling.check("@w.", CheckSpelling.Type.Email))
+    suspend fun checkSpellingEmail(){
+//        val context =InstrumentationRegistry.getInstrumentation().context
+//        val use = SignUpUseCase(tokenRepository, authRepository, context)
+//        val answer = use.execute("Oleg@ad.dw","Oleg Nikolash","1234567").getOrThrow()
+//        println(answer.toString())
+//        assertEquals(Unit, answer)
     }
 }

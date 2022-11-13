@@ -26,7 +26,7 @@ class SignUpUseCase(
                 message = appContext.getString(R.string.password_must_be_more_than_6_characters)
             )
         }
-        if (!CheckSpelling.check(nickname, CheckSpelling.Type.NameAndSecondeName)){
+        if (!CheckSpelling.check(nickname, CheckSpelling.Type.NameAndSecondName)){
             throw Errors.Auth.ErrorInName(
                 message = appContext.getString(R.string.enter_your_first_and_last_name)
             )

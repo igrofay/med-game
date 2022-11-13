@@ -28,7 +28,9 @@ fun NavGraphBuilder.navMainContent(
             )
         }
         composable(RoutingMainContent.Battle.argRoute()){
-            BattleScreen()
+            BattleScreen{
+                navController.popBackStack()
+            }
         }
     }
 }

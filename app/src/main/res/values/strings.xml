@@ -30,4 +30,6 @@
     <string name="opposites_found">Противки найден!</string>
     <string name="cancel">Отмена</string>
     <string name="connecting">Соединяемся…</string>
+    <string name="rerly">Ответить</string>
+    <string name="enter_answer">Введите ответ</string>
 </resources>

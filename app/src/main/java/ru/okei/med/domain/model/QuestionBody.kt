@@ -8,9 +8,9 @@ import ru.okei.med.utils.Timer
 @Serializable
 data class QuestionBody(
     val type: Type,
-    val description:String?,
-    val text:String?,
-    val image: String?,
+    val description:String? = null,
+    val text:String? = null,
+    val image: String? = null,
     val timeSeconds: Int,
     val rightAnswer: AnswerOption,
     val answers: List<AnswerOption>
@@ -22,8 +22,8 @@ data class QuestionBody(
     @Serializable
     data class AnswerOption(
         val type: Type,
-        val text:String?,
-        val image: String?,
+        val text:String? = null,
+        val image: String? = null,
     )
     @Serializable
     enum class Type{

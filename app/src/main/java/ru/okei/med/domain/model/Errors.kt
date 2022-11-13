@@ -11,5 +11,9 @@ sealed class Errors: Throwable() {
     sealed class Request: Errors(){
         class NetworkError(override val message: String): Request()
     }
+    class TransformationJson(val type: Any): Errors(){
+        override val message: String
+            get() = "Can't deserialize value: $type"
+    }
 
 }

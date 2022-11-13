@@ -12,16 +12,20 @@ import ru.okei.med.data.repos.TokenRepositoryImpl
 import ru.okei.med.domain.repos.AuthRepository
 import ru.okei.med.domain.repos.ProfileRepository
 import ru.okei.med.domain.repos.TokenRepository
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
+
     @Provides
+    @Singleton
     fun provideTokenRepository(
         sharedPreferences: SharedPreferences
     ): TokenRepository {
         return TokenRepositoryImpl(sharedPreferences)
     }
+
     @Provides
     fun provideAuthRepository(
         client: HttpClient

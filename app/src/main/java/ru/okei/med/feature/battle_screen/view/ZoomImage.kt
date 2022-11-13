@@ -30,16 +30,11 @@ import ru.okei.med.feature.theme.White95
 fun<T> ZoomImage(
     image: T,
     dpSize: DpSize,
-
 ) {
-    var zIndex by remember {
-        mutableStateOf(0f)
-    }
     var scale by remember { mutableStateOf(1f) }
     var rotationState by remember { mutableStateOf(0f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
     val state = rememberTransformableState { zoomChange, offsetChange, rotationChange ->
-        zIndex = Float.MAX_VALUE
         scale *= zoomChange
         rotationState += rotationChange
         offset += offsetChange
@@ -47,9 +42,8 @@ fun<T> ZoomImage(
     GlideImage(
         imageModel = image,
         modifier = Modifier
-            .zIndex(zIndex)
-            .height(dpSize.height)
-            .fillMaxWidth(.9f)
+            .zIndex(Float.MAX_VALUE)
+            .size(dpSize)
             .pointerInput(Unit) {
                 forEachGesture {
                     awaitPointerEventScope {
@@ -57,7 +51,6 @@ fun<T> ZoomImage(
                         scale = 1f
                         rotationState = 0f
                         offset = Offset.Zero
-                        zIndex = 0f
                     }
                 }
             }

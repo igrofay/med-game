@@ -5,7 +5,7 @@ object CheckSpelling {
         return when(type){
             Type.Email -> isEmail(text)
             Type.Password -> isPassword(text)
-            Type.NameAndSecondeName -> isName(text)
+            Type.NameAndSecondName -> isName(text)
         }
     }
     private fun isEmail(text: String):Boolean{
@@ -30,6 +30,6 @@ object CheckSpelling {
     sealed class Type{
         object Email: Type()
         object Password: Type()
-        object NameAndSecondeName: Type()
+        object NameAndSecondName: Type()
     }
 }

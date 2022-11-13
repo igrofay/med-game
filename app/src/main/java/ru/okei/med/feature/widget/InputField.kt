@@ -9,13 +9,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -34,6 +32,7 @@ fun InputField(
     modifier: Modifier = Modifier,
     shape: RoundedCornerShape = RoundedCornerShape(10),
     isError: Boolean = false,
+    read: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -45,6 +44,7 @@ fun InputField(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
+        readOnly = read,
         textStyle = style,
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
