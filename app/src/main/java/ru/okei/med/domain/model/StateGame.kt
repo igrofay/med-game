@@ -11,7 +11,7 @@ data class StateGame(
     @Serializable
     data class GamePointsRating(
         val nickname: String,
-        val image:String,
+        val image:String?,
         val countOfPoints: Int,
         val maxPointsGame:Int,
         val pointGain: Int,

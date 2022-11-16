@@ -2,7 +2,9 @@ package ru.okei.med.feature.battle_screen.view
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -76,9 +78,8 @@ private fun VerticalRatingGame(
                 label = "Главная",
                 textSize = 14.sp,
                 size = DpSize(250.dp,52.dp),
-            ) {
-
-            }
+                onClick = goToMain
+            )
         }
         Spacer(modifier = Modifier.weight(0.5f))
     }
@@ -90,5 +91,56 @@ private fun HorizontalRatingGame(
     statusGame: StateGame,
     goToMain:()->Unit
 ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally){
+        AppTopBar()
+        Row {
+            RowWithWrap(
+                modifier = Modifier.weight(1f).fillMaxHeight(),
+                verticalSpacer = 30.dp,
+                horizontalSpacer = 30.dp
+            ){
+                for(item in statusGame.rating){
+                    RatingPersonItem(
+                        rating = item,
+                        size = DpSize(100.dp,100.dp),
+                        fontSizeNameText = 18.sp,
+                        fontSizeNamePointsText = 12.sp,
+                        fontSizePointsText = 30.sp)
+                }
+            }
+            if(statusGame.isEndGame){
+                Column(
+                    Modifier.weight(0.75f).fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = "Игра окончена",
+                        fontWeight = FontWeight.W600,
+                        fontSize = 30.sp,
+                        color = White95,
+                        fontFamily = montserratFont,
+                    )
+                    statusGame.nameWinner?.let { nameWinner->
+                        Text(
+                            text = "Победил: $nameWinner",
+                            fontWeight = FontWeight.W400,
+                            fontSize = 18.sp,
+                            color = White95,
+                            fontFamily = montserratFont,
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(0.5f))
+                    CustomButton(
+                        label = "Главная",
+                        textSize = 14.sp,
+                        size = DpSize(250.dp,52.dp),
+                        onClick = goToMain
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
 
+        }
+    }
 }

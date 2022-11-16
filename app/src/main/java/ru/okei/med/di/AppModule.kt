@@ -25,7 +25,7 @@ import javax.inject.Singleton
 object AppModule {
     //192.168.144.66:8080
     //176.28.64.201:3436
-    private const val urlServer = "http://176.28.64.201:3436"
+    private const val urlServer = "http://192.168.144.66:8080"
     private const val keySharedPreferences = "keySharedPreferences"
 
     @Provides
@@ -44,6 +44,7 @@ object AppModule {
                 json(Json {
                     isLenient = true
                     ignoreUnknownKeys = true
+
                 })
             }
             expectSuccess = true

@@ -24,23 +24,20 @@ class BattleRepositoryImpl(
         connection: suspend DefaultClientWebSocketSession.() -> Unit
     ) {
         client.webSocket(
-            //method = HttpMethod.Post,
+            method = HttpMethod.Get,
             path = "/main",
             request = {
                 header(HttpHeaders.Authorization, tokenAccess)
-//                header(HttpHeaders.Connection,HttpHeaders.Upgrade)
-//                header(HttpHeaders.Upgrade, "websocket")
-                contentType(ContentType.Application.Json)
-                setBody(
-                    SettingRoomBody(
-                        nameModule = module,
-                        nameDepartment = department,
-                        type = TypeBattle.Simpler
-                    )
-                )
                 url.protocol = URLProtocol.WS
             },
-            block = connection
+            block = {
+                sendSerialized(SettingRoomBody(
+                    nameModule = module,
+                    nameDepartment = department,
+                    type = TypeBattle.Simple
+                ))
+                connection()
+            }
         )
     }
 
@@ -50,21 +47,20 @@ class BattleRepositoryImpl(
         connection: suspend DefaultClientWebSocketSession.() -> Unit
     ) {
         client.webSocket(
-            //method = HttpMethod.Post,
+            method = HttpMethod.Get,
             path = "/main",
             request = {
                 header(HttpHeaders.Authorization, tokenAccess)
-                contentType(ContentType.Application.Json)
-                setBody(
-                    SettingRoomBody(
-                        nameModule = null,
-                        nameDepartment = department,
-                        type = TypeBattle.Rating
-                    )
-                )
-                //url.protocol = URLProtocol.WS
+                url.protocol = URLProtocol.WS
             },
-            block = connection
+            block = {
+                sendSerialized(SettingRoomBody(
+                    nameModule = null,
+                    nameDepartment = department,
+                    type = TypeBattle.Simple
+                ))
+                connection()
+            }
         )
     }
 

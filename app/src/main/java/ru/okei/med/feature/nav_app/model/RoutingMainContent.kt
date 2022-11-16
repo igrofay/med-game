@@ -17,4 +17,7 @@ sealed class RoutingMainContent(
     ){
         fun argRoute(typeBattle: String = "{typeBattle}")= "$route/$typeBattle"
     }
+    object EditProfile: RoutingMainContent(
+        route = "edit_profile"
+    )
 }

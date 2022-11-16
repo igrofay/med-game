@@ -125,7 +125,7 @@ fun RatingPersonItem(
                             )
                         )
                     ),
-                    lineHeight = fontSizeNamePointsText,
+                    lineHeight = fontSizeNamePointsText*1.25,
                     textAlign = TextAlign.Center
                 )
             }

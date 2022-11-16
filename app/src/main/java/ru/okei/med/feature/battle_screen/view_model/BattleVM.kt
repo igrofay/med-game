@@ -7,15 +7,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.okei.med.domain.interactor.FightWithEnemyInteractor
 import ru.okei.med.domain.model.QuestionBody
 import ru.okei.med.domain.model.StateGame
 import ru.okei.med.domain.model.TypeBattle
 import ru.okei.med.domain.model.TypeBattle.Rating
-import ru.okei.med.domain.model.TypeBattle.Simpler
+import ru.okei.med.domain.model.TypeBattle.Simple
 import ru.okei.med.domain.repos.BattleRepository
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.battle_screen.model.BattleEvent
@@ -53,7 +51,7 @@ class BattleVM @Inject constructor(
             }
         )
         when(typeBattle){
-            Simpler -> {
+            Simple -> {
                 viewModelScope.launch {
                     runCatching {
                         battleRepository.getModules(department)
@@ -68,6 +66,7 @@ class BattleVM @Inject constructor(
             }
         }
     }
+
     private fun errorProcessing(e:Throwable){
         when(e){
             else ->{
@@ -95,17 +94,17 @@ class BattleVM @Inject constructor(
     private fun test1(){
                 _state.value = BattleState.QuestionForm(
             QuestionBody(
-                QuestionBody.Type.Text,
+                QuestionBody.TypeQuestion.Text,
                 "Какая мышца в теле человека является самой крупной?",
                 "Какая мышца в теле человека является самой крупной?",
                 "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg",
                 100,
-                QuestionBody.AnswerOption(QuestionBody.Type.Text,"Plech","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                rightAnswer = QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Input,"Plech","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
                 listOf(
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Плечевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Спиной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Черепной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.Type.Text,"Кистевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg")
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Плечевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Спиной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Черепной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Кистевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg")
                 )
             ), null,
             5

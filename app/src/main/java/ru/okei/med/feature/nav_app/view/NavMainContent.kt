@@ -7,6 +7,7 @@ import androidx.navigation.compose.navigation
 import ru.okei.med.feature.battle_screen.view.BattleScreen
 import ru.okei.med.feature.main_screen.view.MainScreen
 import ru.okei.med.feature.nav_app.model.RoutingMainContent
+import ru.okei.med.feature.profile_screen.view.ProfileScreen
 
 
 fun NavGraphBuilder.navMainContent(
@@ -24,6 +25,9 @@ fun NavGraphBuilder.navMainContent(
                     navController.navigate(RoutingMainContent.Battle.argRoute(type)){
                         popUpTo(RoutingMainContent.Main.route)
                     }
+                },
+                editProfile = {
+                    navController.navigate(RoutingMainContent.EditProfile.route)
                 }
             )
         }
@@ -31,6 +35,9 @@ fun NavGraphBuilder.navMainContent(
             BattleScreen{
                 navController.popBackStack()
             }
+        }
+        composable(RoutingMainContent.EditProfile.route){
+            ProfileScreen()
         }
     }
 }

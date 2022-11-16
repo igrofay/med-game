@@ -7,7 +7,7 @@ import ru.okei.med.utils.Timer
 
 @Serializable
 data class QuestionBody(
-    val type: Type,
+    val type: TypeQuestion,
     val description:String? = null,
     val text:String? = null,
     val image: String? = null,
@@ -21,12 +21,17 @@ data class QuestionBody(
 
     @Serializable
     data class AnswerOption(
-        val type: Type,
+        val type: TypeAnswer,
         val text:String? = null,
         val image: String? = null,
     )
     @Serializable
-    enum class Type{
+    enum class TypeQuestion{
+        Image,
+        Text
+    }
+    @Serializable
+    enum class TypeAnswer{
         Image,
         Text,
         Input

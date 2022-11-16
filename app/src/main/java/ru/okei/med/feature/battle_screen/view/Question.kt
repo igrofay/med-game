@@ -23,7 +23,6 @@ import androidx.compose.ui.zIndex
 import com.skydoves.landscapist.glide.GlideImage
 import ru.okei.med.R
 import ru.okei.med.domain.model.QuestionBody
-import ru.okei.med.domain.model.QuestionBody.Type.*
 import ru.okei.med.feature.battle_screen.model.BattleState
 import ru.okei.med.feature.theme.White95
 import ru.okei.med.feature.widget.AppTopBar
@@ -215,7 +214,7 @@ fun AnswerBox(
     userAnswer: QuestionBody.AnswerOption?,
     reply: (QuestionBody.AnswerOption)->Unit
 ) {
-    if(question.answers.isEmpty()){
+    if(question.rightAnswer.type == QuestionBody.TypeAnswer.Input){
         var answer by remember {
             mutableStateOf("")
         }
@@ -241,12 +240,13 @@ fun AnswerBox(
                 textSize = 14.sp,
                 size = DpSize(200.dp, 52.dp)
             ){
-                reply(QuestionBody.AnswerOption(Input, text = answer))
+                reply(QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Input, text = answer))
             }
         }
     }else{
-        val first = question.answers.first()
-        val size = if(first.type == Image) DpSize(300.dp, 200.dp) else DpSize(150.dp,75.dp)
+        val size = if(question.rightAnswer.type == QuestionBody.TypeAnswer.Image)
+            DpSize(300.dp, 200.dp)
+        else DpSize(150.dp,75.dp)
         for (answerOption in question.answers){
             ItemAnswerOption(
                 answerOption = answerOption,
@@ -273,7 +273,7 @@ private fun ItemAnswerOption(
     else if (rightAnswer != answerOption && userAnswer == answerOption)
         Color.Red.copy(0.5f)
     else Color.Gray.copy(0.5f)
-    if(answerOption.type == Image) {
+    if(answerOption.type == QuestionBody.TypeAnswer.Image) {
         GlideImage(
             imageModel = answerOption.image,
             modifier = Modifier
@@ -308,11 +308,11 @@ private fun QuestionBox(
     question: QuestionBody
 ) {
     when(question.type){
-        Image -> ZoomImage(
+        QuestionBody.TypeQuestion.Image -> ZoomImage(
             image = question.image!!,
             dpSize = DpSize(300.dp, 200.dp)
         )
-        Text -> Text(
+        QuestionBody.TypeQuestion.Text -> Text(
             text = question.text!!,
             color = White95,
             fontSize = 24.sp,
@@ -320,7 +320,6 @@ private fun QuestionBox(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(0.9f)
         )
-        Input -> {}
     }
 }
 

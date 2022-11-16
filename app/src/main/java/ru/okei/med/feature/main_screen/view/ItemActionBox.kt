@@ -25,7 +25,9 @@ import ru.okei.med.R
 import ru.okei.med.feature.theme.White95
 import ru.okei.med.feature.theme.montserratFont
 
+val defBigTextUnit = 20.sp
 val defTextUnit = 14.sp
+val defSmallTextUnit = 12.sp
 val defBorder = BorderStroke(2.dp, Color.White.copy(0.2f))
 val defShape = RoundedCornerShape(20)
 
@@ -91,16 +93,18 @@ fun<T> ItemActionBox(
 @Composable
 fun ItemProfileBox(
     image: String,
-    label: String,
+    name:String,
+    email: String,
     sizeBox: DpSize,
     background: Color,
-    sizeImage: DpSize = DpSize(80.dp,80.dp),
-    fontSize: TextUnit = defTextUnit,
+    sizeImage: DpSize = DpSize(90.dp,90.dp),
+    fontSizeName: TextUnit = defBigTextUnit,
+    fontSizeEmail: TextUnit = defSmallTextUnit,
     border: BorderStroke = defBorder,
     shape: Shape = defShape,
     clickable: ()->Unit
 ) {
-    Column(
+    Row(
         modifier = Modifier
             .height(sizeBox.height)
             .width(sizeBox.width)
@@ -108,8 +112,8 @@ fun ItemProfileBox(
             .background(background, shape)
             .border(border, shape)
             .clickable(onClick = clickable),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ){
         GlideImage(
             imageModel = image,
@@ -128,16 +132,29 @@ fun ItemProfileBox(
             failure = { ImageDefault() },
             loading = { ImageDefault() },
         )
-        Text(
-            text = label,
-            fontFamily = montserratFont,
-            fontWeight = FontWeight.W600,
-            fontSize = fontSize,
-            modifier = Modifier.width(sizeImage.width+14.dp),
-            textAlign = TextAlign.Center,
-            maxLines = 2,
-            color = White95,
-        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column(
+            modifier = Modifier.width(sizeBox.width/2.25f),
+        ){
+            Text(
+                text = name,
+                fontFamily = montserratFont,
+                fontWeight = FontWeight.W600,
+                fontSize = fontSizeName,
+                textAlign = TextAlign.Start,
+                maxLines = 3,
+                color = White95,
+            )
+            Text(
+                text = email,
+                fontFamily = montserratFont,
+                fontWeight = FontWeight.W400,
+                fontSize = fontSizeEmail,
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                color = White95,
+            )
+        }
     }
 }
 

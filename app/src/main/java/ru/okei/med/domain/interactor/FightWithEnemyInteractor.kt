@@ -1,6 +1,7 @@
 package ru.okei.med.domain.interactor
 
 import android.util.Log
+import androidx.core.util.Pools.SynchronizedPool
 import io.ktor.client.plugins.websocket.*
 import io.ktor.serialization.*
 import io.ktor.util.reflect.*
@@ -33,7 +34,8 @@ class FightWithEnemyInteractor(
     private lateinit var newQuestionCameUp: NewQuestionCameUp
     private lateinit var typeBattle: TypeBattle
     private lateinit var department:String
-    private lateinit var tokenRoom: String
+    @Volatile
+    private var tokenRoom: String= ""
 
     fun init(
         department:String,typeBattle: TypeBattle,
@@ -49,7 +51,7 @@ class FightWithEnemyInteractor(
     fun search(module:String? = null){
         scope.launch {
             when(typeBattle){
-                TypeBattle.Simpler -> battleRepository.searchForEnemyModule(
+                TypeBattle.Simple -> battleRepository.searchForEnemyModule(
                     tokenAccess = tokenRepository.access,
                     department = department,
                     module = module!!,
@@ -72,7 +74,6 @@ class FightWithEnemyInteractor(
             for (message in incoming) {
                 message as? Frame.Text ?: continue
                 tokenRoom = message.readText()
-                println(tokenRoom)
                 break
             }
             enemyFound.invoke()
@@ -80,7 +81,7 @@ class FightWithEnemyInteractor(
             socketSession = null
             scope.launch { connectionRoom() }
         } catch (e: Exception) {
-            Log.e("SearchForEnemyController/connectionSearchingEnemy", e.message.toString())
+            Log.e("SearchForEnemyController::connectionSearchingEnemy", e.message.toString())
         }
     }
 
@@ -89,11 +90,11 @@ class FightWithEnemyInteractor(
         battleRepository.connectionRoom(tokenRoom,tokenRepository.access){
             socketSession = this
             try {
-                for (message in incoming) {
-                    readData(message)
+                while (true){
+                    readData(incoming.receive())
                 }
             }catch (e:Exception){
-                Log.e("SearchForEnemyController/connectionRoom", e.message.toString())
+                Log.e("SearchForEnemyController::connectionRoom", e.message.toString())
             }
         }
     }
@@ -101,6 +102,7 @@ class FightWithEnemyInteractor(
     private var whatTypeToSterilize = StateGameBodyJson
 
     private suspend fun DefaultClientWebSocketSession.readData(message:Frame){
+        println((message as Frame.Text).readText())
         try {
             whatTypeToSterilize = when(whatTypeToSterilize){
                 StateGameBodyJson -> {
@@ -115,7 +117,7 @@ class FightWithEnemyInteractor(
                 }
             }
         }catch (e:Throwable){
-            Log.e("SearchForEnemyController/readData", e.message.toString())
+            Log.e("SearchForEnemyController::readData", e.message.toString())
         }
     }
 
