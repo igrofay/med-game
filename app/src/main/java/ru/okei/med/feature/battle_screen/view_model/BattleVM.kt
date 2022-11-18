@@ -9,12 +9,14 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.okei.med.domain.interactor.FightWithEnemyInteractor
+import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.domain.model.QuestionBody
 import ru.okei.med.domain.model.StateGame
 import ru.okei.med.domain.model.TypeBattle
 import ru.okei.med.domain.model.TypeBattle.Rating
 import ru.okei.med.domain.model.TypeBattle.Simple
 import ru.okei.med.domain.repos.BattleRepository
+import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.battle_screen.model.BattleEvent
 import ru.okei.med.feature.battle_screen.model.BattleState
@@ -24,22 +26,30 @@ import javax.inject.Inject
 class BattleVM @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val battleRepository: BattleRepository,
-    private val fightWithEnemy: FightWithEnemyInteractor
+    private val fightWithEnemy: FightWithEnemyInteractor,
+    private val profileUseCase: GetProfileUseCase,
 ) : ViewModel(), EventBase<BattleEvent> {
     private var currentQuestion = 0
-    private val department = "Anatomy"
     private val typeBattle = TypeBattle.valueOf(savedStateHandle.get<String>("typeBattle")!!)
     private val _state = mutableStateOf<BattleState>(BattleState.Loading())
     val state: State<BattleState> get() = _state
 
     init {
+        viewModelScope.launch {
+            profileUseCase.execute()
+                .onSuccess { profile: ProfileBody -> initThis(profile.department.name) }
+                .onFailure(::errorProcessing)
+        }
+    }
+
+    private fun initThis(department:String){
         fightWithEnemy.init(
             department,
             typeBattle,
             enemyFound = {
                 _state.value = BattleState.Loading(BattleState.Loading.Load.EnemyConnection)
-                },
-            newQuestionCameUp = {  question ->
+            },
+            newQuestionCameUp = { question ->
                 _state.value = BattleState.QuestionForm(
                     question = question,
                     userAnswer = null,
@@ -78,10 +88,11 @@ class BattleVM @Inject constructor(
     override fun onEvent(event: BattleEvent) {
         when(event){
             is BattleEvent.Reply -> {
+                if ((_state.value as BattleState.QuestionForm).userAnswer != null) return
                 fightWithEnemy.reply(event.answerOption)
                 _state.value = (_state.value as BattleState.QuestionForm).copy(userAnswer = event.answerOption)
             }
-            BattleEvent.CancelSearch -> {
+            BattleEvent.Cancel -> {
                 fightWithEnemy.close()
             }
             is BattleEvent.ChosenModule -> {

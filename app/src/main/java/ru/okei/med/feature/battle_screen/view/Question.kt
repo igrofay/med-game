@@ -162,7 +162,8 @@ fun HorizontalQuestion(
         Row{
             Column(
                 modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 QuestionBox(question)
@@ -246,7 +247,7 @@ fun AnswerBox(
     }else{
         val size = if(question.rightAnswer.type == QuestionBody.TypeAnswer.Image)
             DpSize(300.dp, 200.dp)
-        else DpSize(150.dp,75.dp)
+        else DpSize(170.dp,90.dp)
         for (answerOption in question.answers){
             ItemAnswerOption(
                 answerOption = answerOption,
@@ -296,7 +297,8 @@ private fun ItemAnswerOption(
                 text = answerOption.text!!,
                 color = White95,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.W400
+                fontWeight = FontWeight.W400,
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -318,7 +320,12 @@ private fun QuestionBox(
             fontSize = 24.sp,
             fontWeight = FontWeight.W600,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(0.9f)
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .heightIn(max = 400.dp)
+                .verticalScroll(
+                    rememberScrollState()
+                )
         )
     }
 }

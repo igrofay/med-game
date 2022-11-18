@@ -24,17 +24,19 @@ import ru.okei.med.feature.theme.montserratFont
 
 @Composable
 fun ContentProfile(
-    profileBody: ProfileBody
+    profileBody: ProfileBody,
+    onChange: ()->Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(14.dp),
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 22.dp)
+            .padding(horizontal = 22.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         Header(label = "Профиль")
-
+        ProfileInfo(profileBody,onChange)
         Header(label = "Кафедра")
     }
 }

@@ -20,7 +20,7 @@ fun BattleScreen(
         BattleState.FindingEnemy ->
             FindingEnemy(
                 exit = {
-                    battleVM.onEvent(BattleEvent.CancelSearch)
+                    battleVM.onEvent(BattleEvent.Cancel)
                     goToBack()
                 }
             )
@@ -40,7 +40,7 @@ fun BattleScreen(
         is BattleState.ViewRatingGame -> RatingGame(
             statusGame = (state as BattleState.ViewRatingGame).statusGame
         ){
-            battleVM.onEvent(BattleEvent.CancelSearch)
+            battleVM.onEvent(BattleEvent.Cancel)
             goToBack()
         }
     }

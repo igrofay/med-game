@@ -44,7 +44,6 @@ object AppModule {
                 json(Json {
                     isLenient = true
                     ignoreUnknownKeys = true
-
                 })
             }
             expectSuccess = true

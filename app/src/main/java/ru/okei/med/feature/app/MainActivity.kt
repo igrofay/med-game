@@ -15,10 +15,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import dagger.hilt.android.AndroidEntryPoint
 import ru.okei.med.R
+import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.domain.model.QuestionBody
 import ru.okei.med.feature.battle_screen.model.BattleState
 import ru.okei.med.feature.battle_screen.view.Question
 import ru.okei.med.feature.nav_app.view.InitialNavigationApp
+import ru.okei.med.feature.profile_screen.view.ContentProfile
 import ru.okei.med.feature.theme.MedTheme
 
 @AndroidEntryPoint

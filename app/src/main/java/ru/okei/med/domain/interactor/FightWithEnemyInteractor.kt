@@ -26,8 +26,9 @@ class FightWithEnemyInteractor(
     private val tokenRepository: TokenRepository,
     private val battleRepository: BattleRepository
 ) {
-    private val scope = CoroutineScope(
-        Dispatchers.IO )
+    private val scope = CoroutineScope(Dispatchers.IO + CoroutineExceptionHandler { coroutineContext, throwable ->
+        Log.e("FightWithEnemyInteractor::$coroutineContext",throwable.message.toString())
+    })
     private var socketSession: DefaultClientWebSocketSession? = null
     private lateinit var enemyFound: EnemyFound
     private lateinit var newRatingTable: NewRatingTable
@@ -90,8 +91,8 @@ class FightWithEnemyInteractor(
         battleRepository.connectionRoom(tokenRoom,tokenRepository.access){
             socketSession = this
             try {
-                while (true){
-                    readData(incoming.receive())
+                for (item in incoming){
+                    readData(item)
                 }
             }catch (e:Exception){
                 Log.e("SearchForEnemyController::connectionRoom", e.message.toString())
@@ -104,6 +105,7 @@ class FightWithEnemyInteractor(
     private suspend fun DefaultClientWebSocketSession.readData(message:Frame){
         println((message as Frame.Text).readText())
         try {
+            Log.e("dwa", whatTypeToSterilize.toString())
             whatTypeToSterilize = when(whatTypeToSterilize){
                 StateGameBodyJson -> {
                     val rating = readObject<StateGame>(message)
