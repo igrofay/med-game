@@ -27,7 +27,7 @@
     <string name="loading">Загрузка…</string>
     <string name="select_module">Выберите модуль</string>
     <string name="looking_for_your_opponent">Ищем вам противника…</string>
-    <string name="opposites_found">Противки найден!</string>
+    <string name="opposites_found">Противник найден!</string>
     <string name="cancel">Отмена</string>
     <string name="connecting">Соединяемся…</string>
     <string name="rerly">Ответить</string>

@@ -236,7 +236,7 @@ fun AnswerBox(
         Box(modifier = Modifier
             .width(300.dp)
             .height(60.dp), contentAlignment = Alignment.Center){
-            CustomButton(
+            if(userAnswer==null) CustomButton(
                 label = stringResource(R.string.rerly),
                 textSize = 14.sp,
                 size = DpSize(200.dp, 52.dp)

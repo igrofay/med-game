@@ -7,6 +7,7 @@ import kotlinx.coroutines.*
 
 class Timer(second: Int) {
     private val scope = CoroutineScope(Dispatchers.Default)
+    private val timeString = mutableStateOf("")
     init {
         scope.launch {
             for (i in second downTo 0){
@@ -18,7 +19,6 @@ class Timer(second: Int) {
             scope.cancel()
         }
     }
-    private val timeString = mutableStateOf("")
 
     @Composable
     fun rememberState() = remember{ timeString }

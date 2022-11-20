@@ -57,7 +57,7 @@ class BattleRepositoryImpl(
                 sendSerialized(SettingRoomBody(
                     nameModule = null,
                     nameDepartment = department,
-                    type = TypeBattle.Simple
+                    type = TypeBattle.Rating
                 ))
                 connection()
             }

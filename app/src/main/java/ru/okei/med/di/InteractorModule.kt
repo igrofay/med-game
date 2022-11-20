@@ -13,7 +13,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object InteractorModule {
     @Provides
-    @Singleton
     fun provideFightWithEnemyInteractor(
         tokenRepository: TokenRepository,
         battleRepository: BattleRepository

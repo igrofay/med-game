@@ -1,5 +1,9 @@
 package ru.okei.med.domain.model
 
-enum class Department {
-    Anatomy
+import kotlinx.serialization.Transient
+
+enum class Department (
+    @Transient val departmentName: String
+){
+    Anatomy("Анатомия")
 }
