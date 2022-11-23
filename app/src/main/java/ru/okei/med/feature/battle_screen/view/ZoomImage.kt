@@ -68,7 +68,7 @@ fun<T> ZoomImage(
             )
         },
         imageOptions = ImageOptions(
-            contentScale = ContentScale.FillHeight
+            contentScale = ContentScale.Fit
         )
     )
 }

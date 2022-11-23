@@ -106,7 +106,6 @@ class FightWithEnemyInteractor(
     private var whatTypeToSterilize = StateGameBodyJson
 
     private suspend fun DefaultClientWebSocketSession.readData(message:Frame){
-        println((message as Frame.Text).readText())
         try {
             whatTypeToSterilize = when(whatTypeToSterilize){
                 StateGameBodyJson -> {

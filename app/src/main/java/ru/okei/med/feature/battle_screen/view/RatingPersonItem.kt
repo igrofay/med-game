@@ -45,7 +45,7 @@ fun RatingPersonItem(
         mutableStateOf(true)
     }
     LaunchedEffect(Unit){
-        delay(600)
+        delay(700)
         visibleImagePerson = false
     }
     val percentage by animateFloatAsState(
