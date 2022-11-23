@@ -27,7 +27,7 @@ class ProfileVM @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val changeImageUseCase: ChangeImageUseCase
 ): ViewModel(), EventBase<ProfileEvent> {
-    private var _state = mutableStateOf<ProfileState>(ProfileState.Loading)
+    private val _state = mutableStateOf<ProfileState>(ProfileState.Loading)
     val state:State<ProfileState> get() = _state
 
     init {
@@ -52,7 +52,8 @@ class ProfileVM @Inject constructor(
         when(event){
             is ProfileEvent.ChangeImage -> {
                 viewModelScope.launch {
-                    changeImageUseCase.execute(event.uri).onFailure(::errorProcessing)
+                    changeImageUseCase.execute(event.uri)
+                        .onFailure(::errorProcessing)
                 }
             }
         }

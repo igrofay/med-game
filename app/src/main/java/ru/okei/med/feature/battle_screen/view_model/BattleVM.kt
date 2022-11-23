@@ -105,17 +105,17 @@ class BattleVM @Inject constructor(
     private fun test1(){
                 _state.value = BattleState.QuestionForm(
             QuestionBody(
-                QuestionBody.TypeQuestion.Text,
+                QuestionBody.TypeQuestion.Image,
                 "Какая мышца в теле человека является самой крупной?",
                 "Какая мышца в теле человека является самой крупной?",
                 "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg",
                 100,
-                rightAnswer = QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Input,"Plech","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                rightAnswer = QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Plech","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
                 listOf(
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Плечевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Спиной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Черепной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Text,"Кистевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg")
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Плечевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Спиной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Черепной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Кистевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg")
                 )
             ), null,
             5

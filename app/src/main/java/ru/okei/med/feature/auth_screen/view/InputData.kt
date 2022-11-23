@@ -3,11 +3,8 @@ package ru.okei.med.feature.auth_screen.view
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import ru.okei.med.R
 import ru.okei.med.feature.auth_screen.model.AuthEvent
 import ru.okei.med.feature.auth_screen.model.AuthState
-import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.theme.White95
 import ru.okei.med.feature.theme.montserratFont
 import ru.okei.med.feature.widget.CustomButton
@@ -40,7 +35,7 @@ import ru.okei.med.feature.widget.noRippleClickable
 fun InputData(
     isVertical: Boolean,
     form: AuthState.FormInput,
-    authEventBase: EventBase<AuthEvent>
+    authEvent: (AuthEvent)-> Unit
 ) {
     var isSignIn by remember {
         mutableStateOf(false)
@@ -126,9 +121,9 @@ fun InputData(
             size = sizeElements
         ){
             if (isSignIn){
-                authEventBase.onEvent(AuthEvent.SignIn)
+                authEvent.invoke(AuthEvent.SignIn)
             }else {
-                authEventBase.onEvent(AuthEvent.SignUp)
+                authEvent.invoke(AuthEvent.SignUp)
             }
         }
         Spacer(modifier = Modifier.height(14.dp))

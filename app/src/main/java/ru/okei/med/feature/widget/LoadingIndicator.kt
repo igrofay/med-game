@@ -4,6 +4,7 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,7 +32,7 @@ fun LoadingIndicator() {
     ){
         val size = min(maxHeight,maxWidth) /3f
         Image(
-            painter = painterResource(R.drawable.ic_atoms_medical),
+            painter = painterResource(R.drawable.ic_logo),
             contentDescription = "Logo",
             modifier = Modifier
                 .size(size)

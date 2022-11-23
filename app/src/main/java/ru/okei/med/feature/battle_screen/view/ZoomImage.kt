@@ -29,7 +29,7 @@ import ru.okei.med.feature.theme.White95
 @Composable
 fun<T> ZoomImage(
     image: T,
-    dpSize: DpSize,
+    modifier: Modifier = Modifier
 ) {
     var scale by remember { mutableStateOf(1f) }
     var rotationState by remember { mutableStateOf(0f) }
@@ -41,9 +41,8 @@ fun<T> ZoomImage(
     }
     GlideImage(
         imageModel = image,
-        modifier = Modifier
+        modifier = modifier
             .zIndex(Float.MAX_VALUE)
-            .size(dpSize)
             .pointerInput(Unit) {
                 forEachGesture {
                     awaitPointerEventScope {

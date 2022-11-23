@@ -17,5 +17,6 @@ class ChangeImageUseCase(
       val stream = appContext.contentResolver.openInputStream(uriImage)!!
       val token = tokenRepository.access
       profileRepository.sendImageProfile(stream, token)
+      stream.close()
    }
 }

@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import ru.okei.med.feature.battle_screen.view.BattleScreen
+import ru.okei.med.feature.friends.view.FriendsScreen
 import ru.okei.med.feature.main_screen.view.MainScreen
 import ru.okei.med.feature.nav_app.model.RoutingMainContent
 import ru.okei.med.feature.profile_screen.view.ProfileScreen
@@ -28,6 +29,9 @@ fun NavGraphBuilder.navMainContent(
                 },
                 editProfile = {
                     navController.navigate(RoutingMainContent.EditProfile.route)
+                },
+                openFriend = {
+                    navController.navigate(RoutingMainContent.Friends.route)
                 }
             )
         }
@@ -38,6 +42,9 @@ fun NavGraphBuilder.navMainContent(
         }
         composable(RoutingMainContent.EditProfile.route){
             ProfileScreen()
+        }
+        composable(RoutingMainContent.Friends.route){
+            FriendsScreen()
         }
     }
 }

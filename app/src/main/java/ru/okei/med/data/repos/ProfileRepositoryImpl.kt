@@ -1,17 +1,11 @@
 package ru.okei.med.data.repos
 
-import android.content.Context
-import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.util.cio.*
-import io.ktor.util.cio.toByteReadChannel
-import io.ktor.utils.io.jvm.javaio.*
 import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.domain.repos.ProfileRepository
-import java.io.File
 import java.io.InputStream
 
 class ProfileRepositoryImpl(
@@ -23,7 +17,7 @@ class ProfileRepositoryImpl(
         }.body()
     }
 
-    override suspend fun sendImageProfile(imageFile: InputStream,token:String) {
+    override suspend fun sendImageProfile(imageFile: InputStream, token:String) {
         client.post("/profileIcon"){
             header(HttpHeaders.Authorization, token)
             setBody(imageFile.readBytes())

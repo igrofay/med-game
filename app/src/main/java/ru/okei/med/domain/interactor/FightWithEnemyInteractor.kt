@@ -77,12 +77,15 @@ class FightWithEnemyInteractor(
                 tokenRoom = message.readText()
                 break
             }
-            enemyFound.invoke()
-            close()
-            socketSession = null
-            scope.launch { connectionRoom() }
         } catch (e: Exception) {
             Log.e("SearchForEnemyController::connectionSearchingEnemy", e.message.toString())
+        }finally {
+            close()
+            socketSession = null
+            if (tokenRoom.isNotBlank()){
+                enemyFound.invoke()
+                scope.launch { connectionRoom() }
+            }
         }
     }
 
@@ -103,6 +106,7 @@ class FightWithEnemyInteractor(
     private var whatTypeToSterilize = StateGameBodyJson
 
     private suspend fun DefaultClientWebSocketSession.readData(message:Frame){
+        println((message as Frame.Text).readText())
         try {
             whatTypeToSterilize = when(whatTypeToSterilize){
                 StateGameBodyJson -> {

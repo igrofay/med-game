@@ -3,18 +3,14 @@ package ru.okei.med.feature.auth_screen.view
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.hilt.navigation.compose.hiltViewModel
-import ru.okei.med.feature.auth_screen.model.AuthEvent
 import ru.okei.med.feature.auth_screen.model.AuthState
 import ru.okei.med.feature.auth_screen.view_model.AuthVM
 import ru.okei.med.feature.widget.AppTopBar
@@ -44,13 +40,13 @@ fun AuthScreen(
                         Column{
                             AppTopBar()
                             AuthLogo(isVertical = true)
-                            InputData(isVertical = true, form = form, authEventBase = authVM)
+                            InputData(isVertical = true, form = form, authEvent = authVM::onEvent)
                         }
                     }
                     else -> {
                         Row{
                             AuthLogo(isVertical = false)
-                            InputData(isVertical = false, form = form, authEventBase = authVM)
+                            InputData(isVertical = false, form = form, authEvent = authVM::onEvent)
                         }
                     }
                 }

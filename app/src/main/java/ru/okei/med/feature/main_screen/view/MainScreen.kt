@@ -1,6 +1,5 @@
 package ru.okei.med.feature.main_screen.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
@@ -34,6 +32,7 @@ fun MainScreen(
     layerBattles:(String)->Unit,
     battleRating:(String)->Unit,
     editProfile:()->Unit,
+    openFriend: ()->Unit,
     mainVM : MainVM = hiltViewModel()
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
@@ -70,7 +69,8 @@ fun MainScreen(
                     profile = state.profileBody,
                     sizeBoxProfile = sizeBoxItemProfile,
                     sizeBoxItems = sizeBoxItems,
-                    editProfile = editProfile
+                    editProfile = editProfile,
+                    openFriend = openFriend
                 )
             }
         }
@@ -99,13 +99,4 @@ private fun Header() {
             .weight(1f)
             .background(Color.Gray.copy(0.4f)))
     }
-}
-
-@Composable
-private fun ImageDefault() {
-    Image(
-        painter = painterResource(R.drawable.ic_logo_profile),
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize()
-    )
 }

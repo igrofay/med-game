@@ -20,4 +20,7 @@ sealed class RoutingMainContent(
     object EditProfile: RoutingMainContent(
         route = "edit_profile"
     )
+    object Friends : RoutingMainContent(
+        route = "friends"
+    )
 }

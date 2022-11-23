@@ -1,6 +1,7 @@
 package ru.okei.med.feature.battle_screen.view
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -275,13 +276,14 @@ private fun ItemAnswerOption(
         Color.Red.copy(0.5f)
     else Color.Gray.copy(0.5f)
     if(answerOption.type == QuestionBody.TypeAnswer.Image) {
-        GlideImage(
-            imageModel = answerOption.image,
+        ZoomImage(
+            image = answerOption.image,
             modifier = Modifier
                 .size(dpSize)
                 .clip(shape)
                 .clickable(onClick = onClick)
-                .border(1.dp, color, shape)
+                .border(2.dp, color, shape)
+                .padding(2.dp)
         )
     }else{
         Box(
@@ -298,7 +300,9 @@ private fun ItemAnswerOption(
                 color = White95,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W400,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(8.dp)
             )
         }
     }
@@ -312,7 +316,7 @@ private fun QuestionBox(
     when(question.type){
         QuestionBody.TypeQuestion.Image -> ZoomImage(
             image = question.image!!,
-            dpSize = DpSize(300.dp, 200.dp)
+            modifier = Modifier.size(DpSize(300.dp, 200.dp)),
         )
         QuestionBody.TypeQuestion.Text -> Text(
             text = question.text!!,
