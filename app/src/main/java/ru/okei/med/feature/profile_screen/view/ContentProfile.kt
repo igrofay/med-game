@@ -13,12 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.okei.med.domain.model.ProfileBody
+import ru.okei.med.feature.profile_screen.model.ProfileEvent
 import ru.okei.med.feature.theme.montserratFont
 
 @Composable
 fun ContentProfile(
     profileBody: ProfileBody,
-    onChange: ()->Unit,
+    onChange: (ProfileEvent)->Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(14.dp),

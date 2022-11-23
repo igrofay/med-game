@@ -14,6 +14,7 @@ import ru.okei.med.domain.repos.TokenRepository
 import ru.okei.med.domain.use_case.auth.RestoreSessionUseCase
 import ru.okei.med.domain.use_case.auth.SignInUseCase
 import ru.okei.med.domain.use_case.auth.SignUpUseCase
+import ru.okei.med.domain.use_case.profile.ChangeImageUseCase
 import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 
 @Module
@@ -58,4 +59,10 @@ object UseCaseModule {
     ) : BattleRepository {
         return BattleRepositoryImpl(client)
     }
+    @Provides
+    fun provideChangeImageUseCase(
+        tokenRepository: TokenRepository,
+        profileRepository: ProfileRepository,
+        appContext: Application
+    ) = ChangeImageUseCase(tokenRepository,profileRepository,appContext)
 }

@@ -16,9 +16,10 @@ fun ProfileScreen(
     val state by remember { profileVM.state }
     when(state){
         ProfileState.Loading -> LoadingIndicator()
-        is ProfileState.Success -> ContentProfile(profileBody = (state as ProfileState.Success).profileBody){
-
-        }
+        is ProfileState.Success -> ContentProfile(
+            profileBody = (state as ProfileState.Success).profileBody,
+            onChange = profileVM::onEvent
+        )
         ProfileState.BadInternetConnection -> {}
     }
 }

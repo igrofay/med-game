@@ -1,20 +1,34 @@
 package ru.okei.med.data.repos
 
+import android.content.Context
 import android.util.Log
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.util.cio.*
+import io.ktor.util.cio.toByteReadChannel
+import io.ktor.utils.io.jvm.javaio.*
 import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.domain.repos.ProfileRepository
+import java.io.File
+import java.io.InputStream
 
 class ProfileRepositoryImpl(
-    private val client: HttpClient
+    private val client: HttpClient,
 ): ProfileRepository {
     override suspend fun getProfile(token: String): ProfileBody {
         return client.get("/profile"){
             header(HttpHeaders.Authorization, token)
         }.body()
     }
+
+    override suspend fun sendImageProfile(imageFile: InputStream,token:String) {
+        client.post("/profileIcon"){
+            header(HttpHeaders.Authorization, token)
+            setBody(imageFile.readBytes())
+        }
+    }
+
 
 }

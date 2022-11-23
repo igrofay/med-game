@@ -1,5 +1,6 @@
 package ru.okei.med.di
 
+import android.content.Context
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
@@ -33,8 +34,9 @@ object RepositoryModule {
         return AuthRepositoryImpl(client)
     }
     @Provides
+    @Singleton
     fun provideProfileRepository(
-        client: HttpClient
+        client: HttpClient,
     ): ProfileRepository {
         return ProfileRepositoryImpl(client)
     }

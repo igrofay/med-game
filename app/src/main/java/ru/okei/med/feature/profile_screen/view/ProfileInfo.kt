@@ -30,6 +30,7 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import ru.okei.med.R
 import ru.okei.med.domain.model.ProfileBody
+import ru.okei.med.feature.profile_screen.model.ProfileEvent
 import ru.okei.med.feature.theme.Purple
 import ru.okei.med.feature.theme.White95
 import ru.okei.med.feature.theme.montserratFont
@@ -37,14 +38,17 @@ import ru.okei.med.feature.theme.montserratFont
 @Composable
 fun ProfileInfo(
     profileBody: ProfileBody,
-    onChange: ()->Unit
+    onChange: (ProfileEvent)->Unit
 ) {
     var imageUrl by remember {
         mutableStateOf(profileBody.urlIcon)
     }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-        onResult ={ uri: Uri? -> uri?.let { imageUrl = it.toString() } }
+        onResult ={ uri: Uri? -> uri?.let {  uriIsNotNull->
+            imageUrl = uriIsNotNull.toString()
+            onChange(ProfileEvent.ChangeImage(uriIsNotNull))
+        } }
     )
     val shape = RoundedCornerShape(10)
     val color = Purple
