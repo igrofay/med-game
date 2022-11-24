@@ -16,7 +16,8 @@ fun Profile(
     sizeBoxProfile: DpSize,
     sizeBoxItems: DpSize,
     editProfile:()->Unit,
-    openFriend: ()->Unit
+    openFriend: ()->Unit,
+    openRating:()->Unit,
 ) {
     val sizeImg = DpSize(50.dp,50.dp)
     ItemProfileBox(
@@ -44,8 +45,7 @@ fun Profile(
         background = DenseBlue,
         fontSize = defSmallTextUnit,
         sizeImage = sizeImg,
-        visibleCircularBackground = false
-    ) {
-
-    }
+        visibleCircularBackground = false,
+        clickable = openRating
+    )
 }

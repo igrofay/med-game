@@ -17,6 +17,8 @@ class FriendsVM @Inject constructor(
     val state: State<FriendsState> get() = _state
 
     override fun onEvent(event: FriendsEvent) {
-
+        when(event){
+            FriendsEvent.RetryRequest ->{}
+        }
     }
 }

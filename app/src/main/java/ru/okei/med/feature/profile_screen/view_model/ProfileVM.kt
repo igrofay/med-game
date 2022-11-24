@@ -56,6 +56,13 @@ class ProfileVM @Inject constructor(
                         .onFailure(::errorProcessing)
                 }
             }
+            ProfileEvent.RetryRequest -> {
+                viewModelScope.launch(Dispatchers.IO){
+                    getProfileUseCase.execute().onSuccess { profileBody->
+                        _state.value = ProfileState.Success(profileBody)
+                    }.onFailure(::errorProcessing)
+                }
+            }
         }
     }
 }

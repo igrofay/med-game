@@ -1,8 +1,5 @@
 package ru.okei.med.feature.nav_app.model
 
-import androidx.annotation.DrawableRes
-import ru.okei.med.R
-
 sealed class RoutingMainContent(
     val route: String,
 ) {
@@ -22,5 +19,8 @@ sealed class RoutingMainContent(
     )
     object Friends : RoutingMainContent(
         route = "friends"
+    )
+    object Rating: RoutingMainContent(
+        route = "rating"
     )
 }

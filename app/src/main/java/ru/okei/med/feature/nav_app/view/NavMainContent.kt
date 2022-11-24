@@ -9,6 +9,7 @@ import ru.okei.med.feature.friends.view.FriendsScreen
 import ru.okei.med.feature.main_screen.view.MainScreen
 import ru.okei.med.feature.nav_app.model.RoutingMainContent
 import ru.okei.med.feature.profile_screen.view.ProfileScreen
+import ru.okei.med.feature.rating.view.RatingScreen
 
 
 fun NavGraphBuilder.navMainContent(
@@ -28,11 +29,20 @@ fun NavGraphBuilder.navMainContent(
                     }
                 },
                 editProfile = {
-                    navController.navigate(RoutingMainContent.EditProfile.route)
+                    navController.navigate(RoutingMainContent.EditProfile.route){
+                        popUpTo(RoutingMainContent.Main.route)
+                    }
                 },
                 openFriend = {
-                    navController.navigate(RoutingMainContent.Friends.route)
-                }
+                    navController.navigate(RoutingMainContent.Friends.route){
+                        popUpTo(RoutingMainContent.Main.route)
+                    }
+                },
+                openRating = {
+                    navController.navigate(RoutingMainContent.Rating.route){
+                        popUpTo(RoutingMainContent.Main.route)
+                    }
+                },
             )
         }
         composable(RoutingMainContent.Battle.argRoute()){
@@ -45,6 +55,9 @@ fun NavGraphBuilder.navMainContent(
         }
         composable(RoutingMainContent.Friends.route){
             FriendsScreen()
+        }
+        composable(RoutingMainContent.Rating.route){
+            RatingScreen()
         }
     }
 }

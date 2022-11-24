@@ -4,4 +4,5 @@ import android.net.Uri
 
 sealed class ProfileEvent {
     class ChangeImage(val uri:Uri): ProfileEvent()
+    object RetryRequest: ProfileEvent()
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.okei.med.R
 import ru.okei.med.domain.model.TypeBattle
+import ru.okei.med.feature.main_screen.model.MainEvent
 import ru.okei.med.feature.main_screen.view_model.MainVM
 import ru.okei.med.feature.theme.montserratFont
 import ru.okei.med.feature.widget.RowWithWrap
@@ -33,8 +34,12 @@ fun MainScreen(
     battleRating:(String)->Unit,
     editProfile:()->Unit,
     openFriend: ()->Unit,
-    mainVM : MainVM = hiltViewModel()
+    openRating : ()->Unit,
+    mainVM : MainVM = hiltViewModel(),
 ) {
+    LaunchedEffect(Unit){
+        mainVM.onEvent(MainEvent.UpdateData)
+    }
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val state by remember { mainVM.state }
     val errorMessage by mainVM.error
@@ -70,7 +75,8 @@ fun MainScreen(
                     sizeBoxProfile = sizeBoxItemProfile,
                     sizeBoxItems = sizeBoxItems,
                     editProfile = editProfile,
-                    openFriend = openFriend
+                    openFriend = openFriend,
+                    openRating = openRating
                 )
             }
         }
