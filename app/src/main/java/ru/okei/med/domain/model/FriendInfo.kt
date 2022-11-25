@@ -8,6 +8,8 @@ data class FriendInfo(
     val name: String = "",
     val icon: String= "",
     val department: Department = Department.Anatomy,
+    val placeInRatingDepartment: Int = 0,
+    val numberPointsInRatingDepartment: Int = 0,
     val state: FriendState
 ){
     enum class FriendState{

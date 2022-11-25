@@ -14,13 +14,13 @@ import ru.okei.med.domain.repos.TokenRepository
 import ru.okei.med.domain.use_case.auth.RestoreSessionUseCase
 import ru.okei.med.domain.use_case.auth.SignInUseCase
 import ru.okei.med.domain.use_case.auth.SignUpUseCase
+import ru.okei.med.domain.use_case.frends.GetFriendsUseCase
 import ru.okei.med.domain.use_case.profile.ChangeImageUseCase
 import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
-
     @Provides
     fun provideSignInUseCase(
         tokenRepository: TokenRepository,
@@ -65,4 +65,9 @@ object UseCaseModule {
         profileRepository: ProfileRepository,
         appContext: Application
     ) = ChangeImageUseCase(tokenRepository,profileRepository,appContext)
+
+    @Provides
+    fun provideGetFriendsUseCase(
+        profileRepository: ProfileRepository
+    ) = GetFriendsUseCase(profileRepository)
 }
