@@ -13,9 +13,9 @@ data class FriendInfo(
     val state: FriendState
 ){
     enum class FriendState{
-        Friend,
-        ApplicationSent,
-        Subscriber,
-        NotFriends,
+        Friend, // Друг
+        ApplicationSent, // человек которому отправили заявку в друзья
+        Subscriber, // человек который от правил заявку в друзья
+        NotFriends, // Обычный чел
     }
 }

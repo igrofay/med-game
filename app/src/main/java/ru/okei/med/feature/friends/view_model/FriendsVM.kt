@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.okei.med.domain.model.Errors
 import ru.okei.med.domain.use_case.frends.GetFriendsUseCase
@@ -20,11 +22,13 @@ class FriendsVM @Inject constructor(
 ): ViewModel(), EventBase<FriendsEvent>{
     private val _state = mutableStateOf<FriendsState>(FriendsState.Loading)
     val state: State<FriendsState> get() = _state
+    private var textForSearchUser = ""
+    private var job: Job? = null
 
     init {
-        viewModelScope.launch {
+        job = viewModelScope.launch {
             getFriendsUseCase.execute().onSuccess { friends ->
-                _state.value = FriendsState.Success(friends)
+                _state.value = FriendsState.FriendList(friends)
             }.onFailure(::errorProcessing)
         }
     }
@@ -45,8 +49,21 @@ class FriendsVM @Inject constructor(
             FriendsEvent.RetryRequest ->{
                 viewModelScope.launch {
                     getFriendsUseCase.execute().onSuccess { friends ->
-                        _state.value = FriendsState.Success(friends)
+                        _state.value = FriendsState.FriendList(friends)
                     }.onFailure(::errorProcessing)
+                }
+            }
+            is FriendsEvent.SearchUser -> {
+                textForSearchUser = event.textForSearching
+                _state.value = FriendsState.Loading
+                viewModelScope.launch {
+                    delay(500)
+                    if(event.equals(textForSearchUser)){
+                        job?.cancel()
+                        job = launch {
+
+                        }
+                    }
                 }
             }
         }

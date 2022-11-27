@@ -9,7 +9,7 @@ sealed class Errors: Throwable() {
         object AccessTokenExpired: Auth()
     }
     sealed class Request: Errors(){
-        class NetworkError(override val message: String): Request()
+        class NetworkError(override val message: String?): Request()
     }
     class TransformationJson(val type: Any): Errors(){
         override val message: String

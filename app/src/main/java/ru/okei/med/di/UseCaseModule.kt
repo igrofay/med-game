@@ -68,6 +68,6 @@ object UseCaseModule {
 
     @Provides
     fun provideGetFriendsUseCase(
-        profileRepository: ProfileRepository
+        profileRepository: ProfileRepository,
     ) = GetFriendsUseCase(profileRepository)
 }

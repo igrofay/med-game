@@ -6,7 +6,8 @@ import ru.okei.med.domain.model.FriendInfo
 sealed class FriendsState {
     object Loading:FriendsState()
     object BadInternetConnection: FriendsState()
-    class Success(
+    class FriendList(
         val friends: Map<FriendInfo.FriendState, List<FriendInfo>>
     ): FriendsState()
+    class FoundUserList(val userList: List<FriendInfo>):FriendsState()
 }
