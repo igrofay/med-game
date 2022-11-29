@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import ru.okei.med.domain.model.AchievementBody
-import ru.okei.med.feature.theme.OrangeLight
+import ru.okei.med.feature.theme.Orange
 import ru.okei.med.feature.theme.White95
 
 
@@ -70,7 +70,7 @@ fun ItemAchievement(
                         .height(10.dp)
                         .weight(1f)
                         .clip(CircleShape),
-                    color = OrangeLight,
+                    color = Orange,
                     backgroundColor = colors.onBackground
                 )
                 Spacer(modifier = Modifier.width(12.dp))

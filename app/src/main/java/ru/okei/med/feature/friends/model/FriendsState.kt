@@ -7,7 +7,7 @@ sealed class FriendsState {
     object Loading:FriendsState()
     object BadInternetConnection: FriendsState()
     class FriendList(
-        val friends: Map<FriendInfo.FriendState, List<FriendInfo>>
+        val friends: Map<FriendInfo.FriendStatus, List<FriendInfo>>
     ): FriendsState()
     class FoundUserList(val userList: List<FriendInfo>):FriendsState()
 }

@@ -45,15 +45,20 @@ fun FriendsScreen(
             .padding(top = 32.dp, start = 20.dp, end = 20.dp)
     ){
         SearchUser(friendsVM::onEvent)
+        Spacer(modifier = Modifier.height(24.dp))
         when(state){
             FriendsState.BadInternetConnection -> RetryRequest {
                 friendsVM.onEvent(FriendsEvent.RetryRequest)
             }
             FriendsState.Loading -> LoadingIndicator()
             is FriendsState.FriendList -> FriendList(
-                friends = (state as FriendsState.FriendList).friends
+                friends = (state as FriendsState.FriendList).friends,
+                friendsVM::onEvent
             )
-            is FriendsState.FoundUserList ->{}
+            is FriendsState.FoundUserList ->UserList(
+                (state as FriendsState.FoundUserList).userList,
+                friendsVM::onEvent
+            )
         }
     }
 }
@@ -125,7 +130,6 @@ private fun SearchUser(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
-                    Modifier
                 )
             }
         }

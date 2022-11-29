@@ -10,27 +10,29 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.okei.med.domain.model.Errors
+import ru.okei.med.domain.use_case.frends.ActionOnFriendUseCase
 import ru.okei.med.domain.use_case.frends.GetFriendsUseCase
+import ru.okei.med.domain.use_case.frends.GetUserWithSuchNameUseCase
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.friends.model.FriendsEvent
 import ru.okei.med.feature.friends.model.FriendsState
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
 @HiltViewModel
 class FriendsVM @Inject constructor(
-    private val getFriendsUseCase: GetFriendsUseCase
+    private val getFriendsUseCase: GetFriendsUseCase,
+    private val getUserWithSuchNameUseCase: GetUserWithSuchNameUseCase,
+    private val actionOnFriendUseCase: ActionOnFriendUseCase,
 ): ViewModel(), EventBase<FriendsEvent>{
     private val _state = mutableStateOf<FriendsState>(FriendsState.Loading)
     val state: State<FriendsState> get() = _state
-    private var textForSearchUser = ""
+    private var searchUsersText = AtomicReference("")
     private var job: Job? = null
 
+
     init {
-        job = viewModelScope.launch {
-            getFriendsUseCase.execute().onSuccess { friends ->
-                _state.value = FriendsState.FriendList(friends)
-            }.onFailure(::errorProcessing)
-        }
+        getFriendList()
     }
 
     private fun errorProcessing(e:Throwable){
@@ -47,25 +49,75 @@ class FriendsVM @Inject constructor(
     override fun onEvent(event: FriendsEvent) {
         when(event){
             FriendsEvent.RetryRequest ->{
-                viewModelScope.launch {
-                    getFriendsUseCase.execute().onSuccess { friends ->
-                        _state.value = FriendsState.FriendList(friends)
-                    }.onFailure(::errorProcessing)
-                }
+                _state.value = FriendsState.Loading
+                searchUsers(searchUsersText.get())
             }
             is FriendsEvent.SearchUser -> {
-                textForSearchUser = event.textForSearching
                 _state.value = FriendsState.Loading
+                searchUsers(event.textForSearching)
+            }
+            is FriendsEvent.AcceptFriendRequest -> {
                 viewModelScope.launch {
-                    delay(500)
-                    if(event.equals(textForSearchUser)){
-                        job?.cancel()
-                        job = launch {
+                    actionOnFriendUseCase
+                        .execute(event.email,ActionOnFriendUseCase.Action.AcceptRequest)
+                        .onSuccess { onEvent(FriendsEvent.RetryRequest) }
+                }
+            }
+            is FriendsEvent.CanselFriendRequest -> {
+                viewModelScope.launch {
+                    actionOnFriendUseCase
+                        .execute(event.email,ActionOnFriendUseCase.Action.CancelRequest)
+                        .onSuccess { onEvent(FriendsEvent.RetryRequest) }
+                }
+            }
+            is FriendsEvent.DeleteFriend -> {
+                viewModelScope.launch {
+                    actionOnFriendUseCase
+                        .execute(event.email,ActionOnFriendUseCase.Action.Delete)
+                        .onSuccess { onEvent(FriendsEvent.RetryRequest) }
+                }
+            }
+            is FriendsEvent.SendFriendRequest ->{
+                viewModelScope.launch{
+                    actionOnFriendUseCase
+                        .execute(event.email,ActionOnFriendUseCase.Action.SendRequest)
+                        .onSuccess { onEvent(FriendsEvent.RetryRequest) }
+                }
+            }
+            FriendsEvent.GetFriendList -> getFriendList()
+        }
+    }
 
-                        }
+    private fun searchUsers(textForSearching: String){
+        searchUsersText.set(textForSearching)
+        viewModelScope.launch {
+            delay(500)
+            if(textForSearching == searchUsersText.get()){
+                if(textForSearching.isNotBlank()){
+                    job?.cancel()
+                    job = launch {
+                        getUserWithSuchNameUseCase.execute(textForSearching).onSuccess { users ->
+                            _state.value = FriendsState.FoundUserList(users)
+                        }.onFailure(::errorProcessing)
                     }
+                }else{
+                    getFriendList()
                 }
             }
         }
+    }
+
+    private fun getFriendList(){
+        job?.cancel()
+        job = viewModelScope.launch {
+            getFriendsUseCase.execute().onSuccess { friends ->
+                _state.value = FriendsState.FriendList(friends)
+            }.onFailure(::errorProcessing)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        searchUsersText.set(null)
     }
 }

@@ -10,12 +10,14 @@ data class FriendInfo(
     val department: Department = Department.Anatomy,
     val placeInRatingDepartment: Int = 0,
     val numberPointsInRatingDepartment: Int = 0,
-    val state: FriendState
+    val status: FriendStatus
 ){
-    enum class FriendState{
-        Friend, // Друг
-        ApplicationSent, // человек которому отправили заявку в друзья
-        Subscriber, // человек который от правил заявку в друзья
-        NotFriends, // Обычный чел
+    enum class FriendStatus(
+        @Transient val statusName: String,
+    ){
+        Friend("Друзья"),
+        ApplicationSent("Отправленные заявки"),
+        Subscriber("Полученные заявки"),
+        NotFriends("Не друзья"),
     }
 }

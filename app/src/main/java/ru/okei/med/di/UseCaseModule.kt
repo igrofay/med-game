@@ -7,14 +7,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import ru.okei.med.data.repos.BattleRepositoryImpl
-import ru.okei.med.domain.repos.AuthRepository
-import ru.okei.med.domain.repos.BattleRepository
-import ru.okei.med.domain.repos.ProfileRepository
-import ru.okei.med.domain.repos.TokenRepository
+import ru.okei.med.domain.repos.*
 import ru.okei.med.domain.use_case.auth.RestoreSessionUseCase
 import ru.okei.med.domain.use_case.auth.SignInUseCase
 import ru.okei.med.domain.use_case.auth.SignUpUseCase
+import ru.okei.med.domain.use_case.frends.ActionOnFriendUseCase
 import ru.okei.med.domain.use_case.frends.GetFriendsUseCase
+import ru.okei.med.domain.use_case.frends.GetUserWithSuchNameUseCase
 import ru.okei.med.domain.use_case.profile.ChangeImageUseCase
 import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 
@@ -68,6 +67,19 @@ object UseCaseModule {
 
     @Provides
     fun provideGetFriendsUseCase(
-        profileRepository: ProfileRepository,
-    ) = GetFriendsUseCase(profileRepository)
+        tokenRepository: TokenRepository,
+        friendsRepository: FriendsRepository
+    ) = GetFriendsUseCase(tokenRepository,friendsRepository)
+
+    @Provides
+    fun provideGetUserWithSuchName(
+        tokenRepository: TokenRepository,
+        profileRepository: FriendsRepository,
+    ) = GetUserWithSuchNameUseCase(tokenRepository,profileRepository)
+
+    @Provides
+    fun provideActionOnFriendUseCase(
+        tokenRepository: TokenRepository,
+        friendsRepository: FriendsRepository,
+    ) = ActionOnFriendUseCase(tokenRepository, friendsRepository)
 }

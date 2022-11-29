@@ -10,7 +10,4 @@ interface ProfileRepository {
 
     suspend fun sendImageProfile(imageFile:InputStream,token:String)
 
-    suspend fun getFriends() : List<FriendInfo>
-
-    suspend fun getUsers(nameUser: String): List<FriendInfo>
 }
