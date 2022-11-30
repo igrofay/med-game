@@ -229,7 +229,7 @@ fun AnswerBox(
             label = stringResource(R.string.enter_answer),
             size = DpSize(300.dp, 52.dp),
             textStyle = TextStyle(
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 color = color,
                 fontWeight = FontWeight.W400,),
             read = userAnswer != null
@@ -239,7 +239,7 @@ fun AnswerBox(
             .height(60.dp), contentAlignment = Alignment.Center){
             if(userAnswer==null) CustomButton(
                 label = stringResource(R.string.rerly),
-                textSize = 14.sp,
+                textSize = 13.sp,
                 size = DpSize(200.dp, 52.dp)
             ){
                 reply(QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Input, text = answer))
@@ -298,7 +298,7 @@ private fun ItemAnswerOption(
             Text(
                 text = answerOption.text!!,
                 color = White95,
-                fontSize = 14.sp,
+                fontSize = 13.sp,
                 fontWeight = FontWeight.W400,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -321,7 +321,7 @@ private fun QuestionBox(
         QuestionBody.TypeQuestion.Text -> Text(
             text = question.text!!,
             color = White95,
-            fontSize = 24.sp,
+            fontSize = 22.sp,
             fontWeight = FontWeight.W600,
             textAlign = TextAlign.Center,
             modifier = Modifier
