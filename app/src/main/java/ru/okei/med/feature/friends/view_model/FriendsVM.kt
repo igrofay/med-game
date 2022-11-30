@@ -60,7 +60,10 @@ class FriendsVM @Inject constructor(
                 viewModelScope.launch {
                     actionOnFriendUseCase
                         .execute(event.email,ActionOnFriendUseCase.Action.AcceptRequest)
-                        .onSuccess { onEvent(FriendsEvent.RetryRequest) }
+                        .onSuccess {
+
+                            onEvent(FriendsEvent.RetryRequest)
+                        }
                 }
             }
             is FriendsEvent.CanselFriendRequest -> {

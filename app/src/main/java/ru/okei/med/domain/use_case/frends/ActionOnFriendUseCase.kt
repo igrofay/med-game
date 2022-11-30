@@ -18,7 +18,7 @@ class ActionOnFriendUseCase(
                 Action.SendRequest -> friendsRepository.sendFriendRequest(token, email)
             }
         }catch (e:Throwable){
-            Log.e("AA",e.message.toString())
+            Log.e("ActionOnFriendUseCase",e.message.toString())
         }
     }
     enum class Action{

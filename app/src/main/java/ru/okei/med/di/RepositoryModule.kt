@@ -7,14 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
-import ru.okei.med.data.repos.AuthRepositoryImpl
-import ru.okei.med.data.repos.FriendsRepositoryImpl
-import ru.okei.med.data.repos.ProfileRepositoryImpl
-import ru.okei.med.data.repos.TokenRepositoryImpl
-import ru.okei.med.domain.repos.AuthRepository
-import ru.okei.med.domain.repos.FriendsRepository
-import ru.okei.med.domain.repos.ProfileRepository
-import ru.okei.med.domain.repos.TokenRepository
+import ru.okei.med.data.repos.*
+import ru.okei.med.domain.repos.*
 import javax.inject.Singleton
 
 @Module
@@ -48,5 +42,12 @@ object RepositoryModule {
         client: HttpClient
     ) : FriendsRepository {
         return FriendsRepositoryImpl(client)
+    }
+
+    @Provides
+    fun provideRatingRepository(
+        client: HttpClient
+    ): RatingRepository{
+        return RatingRepositoryImpl(client)
     }
 }

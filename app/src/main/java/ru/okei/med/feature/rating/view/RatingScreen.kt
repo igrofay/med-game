@@ -19,5 +19,8 @@ fun RatingScreen(
             ratingVM.onEvent(RatingEvent.RetryRequest)
         }
         RatingState.Loading -> LoadingIndicator()
+        is RatingState.RatingList -> RatingList(
+            (state as RatingState.RatingList).ratingInfo
+        )
     }
 }

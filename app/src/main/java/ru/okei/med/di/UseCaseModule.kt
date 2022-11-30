@@ -16,6 +16,7 @@ import ru.okei.med.domain.use_case.frends.GetFriendsUseCase
 import ru.okei.med.domain.use_case.frends.GetUserWithSuchNameUseCase
 import ru.okei.med.domain.use_case.profile.ChangeImageUseCase
 import ru.okei.med.domain.use_case.profile.GetProfileUseCase
+import ru.okei.med.domain.use_case.rating.GetRatingInfoUseCase
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -82,4 +83,11 @@ object UseCaseModule {
         tokenRepository: TokenRepository,
         friendsRepository: FriendsRepository,
     ) = ActionOnFriendUseCase(tokenRepository, friendsRepository)
+
+    @Provides
+    fun provideGetRatingInfoUseCase(
+        tokenRepository: TokenRepository,
+        ratingRepository: RatingRepository,
+        appContext: Application
+    ) = GetRatingInfoUseCase(tokenRepository, ratingRepository,appContext)
 }

@@ -23,25 +23,25 @@ class FriendsRepositoryImpl(val httpClient: HttpClient): FriendsRepository {
     }
 
     override suspend fun deleteFriend(token: String, email: String) {
-        httpClient.delete("http://192.168.144.66:8080/friend/$email"){
+        httpClient.delete("/friend/$email"){
             header(HttpHeaders.Authorization, token)
         }
     }
 
     override suspend fun acceptFriendRequest(token: String, email: String) {
-        httpClient.patch("http://192.168.144.66:8080/friend/$email"){
+        httpClient.patch("/friend/$email"){
             header(HttpHeaders.Authorization, token)
         }
     }
 
     override suspend fun cancelFriendRequest(token: String, email: String) {
-        httpClient.delete("http://192.168.144.66:8080/friendReq/$email"){
+        httpClient.delete("/friendReq/$email"){
             header(HttpHeaders.Authorization, token)
         }
     }
 
     override suspend fun sendFriendRequest(token: String, email: String) {
-        httpClient.post("http://192.168.144.66:8080/friendReq/$email"){
+        httpClient.post("/friendReq/$email"){
             header(HttpHeaders.Authorization, token)
         }
     }
