@@ -26,12 +26,14 @@ import com.skydoves.landscapist.glide.GlideImage
 import ru.okei.med.R
 import ru.okei.med.domain.model.RatingInfo
 import ru.okei.med.feature.theme.Blue
+import ru.okei.med.feature.theme.Purple
 import ru.okei.med.feature.theme.White95
 import ru.okei.med.feature.theme.montserratFont
 
 @Composable
 fun ItemPlayerRatingInfo(
     player: RatingInfo.Player,
+    emailOwnerAccount:String,
     shape: Shape = RoundedCornerShape(10.dp),
     sizeIcon: DpSize = DpSize(48.dp,48.dp),
     borderStroke: BorderStroke = BorderStroke(1.dp, White95.copy(0.5f)),
@@ -39,12 +41,13 @@ fun ItemPlayerRatingInfo(
     sizeMainText: TextUnit = 13.5.sp,
     sizeSideText: TextUnit = 12.sp,
 ) {
+    val color = if(player.email == emailOwnerAccount) Purple else Blue
     Row(
         modifier = Modifier
             .padding(vertical = 4.dp)
             .fillMaxWidth()
             .clip(shape)
-            .background(Blue, shape)
+            .background(color, shape)
             .border(borderStroke, shape)
             .padding(paddingContent),
         verticalAlignment = Alignment.CenterVertically

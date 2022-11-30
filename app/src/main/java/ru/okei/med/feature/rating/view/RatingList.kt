@@ -20,7 +20,8 @@ import ru.okei.med.feature.widget.AppTopBar
 
 @Composable
 fun RatingList(
-    ratingInfo: RatingInfo
+    ratingInfo: RatingInfo,
+    emailOwnerAccount:String
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -42,7 +43,7 @@ fun RatingList(
                 Spacer(modifier = Modifier.height(25.dp))
             }
             items(ratingInfo.listPlayers){ player: RatingInfo.Player ->
-                ItemPlayerRatingInfo(player)
+                ItemPlayerRatingInfo(player,emailOwnerAccount)
             }
         }
     }

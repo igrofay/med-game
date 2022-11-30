@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.okei.med.domain.model.Errors
+import ru.okei.med.domain.model.ProfileBody
+import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 import ru.okei.med.domain.use_case.rating.GetRatingInfoUseCase
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.rating.model.RatingEvent
@@ -16,16 +18,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RatingVM @Inject constructor(
-    private val getRatingInfoUseCase: GetRatingInfoUseCase
+    private val getRatingInfoUseCase: GetRatingInfoUseCase,
+    private val getProfileUseCase: GetProfileUseCase,
 ): ViewModel(), EventBase<RatingEvent> {
     private val _state = mutableStateOf<RatingState>(RatingState.Loading)
     val state: State<RatingState> get() = _state
+    private var profile : ProfileBody? = null
 
     init {
+        load()
+    }
+
+    private fun load(){
         viewModelScope.launch {
-            getRatingInfoUseCase.execute().onSuccess {ratingInfo->
-                _state.value = RatingState.RatingList(ratingInfo)
-            }.onFailure(::errorProcessing)
+            try {
+                if(profile == null){
+                    profile = getProfileUseCase.execute().getOrThrow()
+                }
+                getRatingInfoUseCase.execute().onSuccess {ratingInfo->
+                    _state.value = RatingState.RatingList(ratingInfo,profile!!.mail)
+                }.onFailure(::errorProcessing)
+            }catch (e:Throwable){
+                errorProcessing(e)
+            }
         }
     }
 
@@ -33,11 +48,7 @@ class RatingVM @Inject constructor(
         when (event) {
             RatingEvent.RetryRequest -> {
                 _state.value = RatingState.Loading
-                viewModelScope.launch {
-                    getRatingInfoUseCase.execute().onSuccess {ratingInfo->
-                        _state.value = RatingState.RatingList(ratingInfo)
-                    }.onFailure(::errorProcessing)
-                }
+                load()
             }
         }
     }

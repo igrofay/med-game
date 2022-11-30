@@ -20,7 +20,8 @@ fun RatingScreen(
         }
         RatingState.Loading -> LoadingIndicator()
         is RatingState.RatingList -> RatingList(
-            (state as RatingState.RatingList).ratingInfo
+            (state as RatingState.RatingList).ratingInfo,
+            (state as RatingState.RatingList).myEmail
         )
     }
 }
