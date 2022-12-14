@@ -3,6 +3,7 @@ package ru.okei.med.data.repos
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import ru.okei.med.domain.model.FriendInfo
 import ru.okei.med.domain.repos.FriendsRepository
@@ -12,6 +13,8 @@ class FriendsRepositoryImpl(val httpClient: HttpClient): FriendsRepository {
     override suspend fun getFriends(token:String): List<FriendInfo> {
         return httpClient.get("/friends"){
             header(HttpHeaders.Authorization, token)
+        }.apply {
+            println(bodyAsText())
         }.body()
     }
 

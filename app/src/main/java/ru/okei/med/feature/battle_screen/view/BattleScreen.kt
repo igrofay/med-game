@@ -14,8 +14,11 @@ fun BattleScreen(
     battleVM: BattleVM = hiltViewModel(),
     goToBack: ()->Unit
 ) {
-    BackHandler {}
+
     val state by remember { battleVM.state }
+    BackHandler(enabled = state !is BattleState.ModuleSelection){
+
+    }
     when(state){
         BattleState.FindingEnemy ->
             FindingEnemy(

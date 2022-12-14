@@ -136,12 +136,13 @@ fun ItemMainInfo(
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Text(
-                text = "#${friendInfo.placeInRatingDepartment} место в ${friendInfo.department.departmentName}",
+                text = friendInfo.department.departmentName,
                 fontFamily = montserratFont,
                 fontWeight = FontWeight.W600,
                 fontSize = sizeMainText,
                 textAlign = TextAlign.End,
                 maxLines = 2,
+                modifier = Modifier.fillMaxWidth(),
                 overflow = TextOverflow.Ellipsis,
             )
             Text(

@@ -4,8 +4,6 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import ru.okei.med.domain.model.Department
-import ru.okei.med.domain.model.FriendInfo
 import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.domain.repos.ProfileRepository
 import java.io.InputStream
