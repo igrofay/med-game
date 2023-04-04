@@ -83,8 +83,6 @@ dependencies {
     //glide
     implementation "com.github.skydoves:landscapist-glide:2.0.0"
 
-    //Konfetti
-    implementation 'nl.dionsegijn:konfetti-compose:2.0.2'
     //Pager
     implementation "com.google.accompanist:accompanist-pager-indicators:0.19.0"
 

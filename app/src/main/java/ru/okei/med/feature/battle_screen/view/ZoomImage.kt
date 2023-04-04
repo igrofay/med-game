@@ -43,16 +43,16 @@ fun<T> ZoomImage(
         imageModel = image,
         modifier = modifier
             .zIndex(Float.MAX_VALUE)
-            .pointerInput(Unit) {
-                forEachGesture {
-                    awaitPointerEventScope {
-                        awaitUpTap()
-                        scale = 1f
-                        rotationState = 0f
-                        offset = Offset.Zero
-                    }
-                }
-            }
+//            .pointerInput(Unit) {
+//                forEachGesture {
+//                    awaitPointerEventScope {
+//                        awaitUpTap()
+//                        scale = 1f
+//                        rotationState = 0f
+//                        offset = Offset.Zero
+//                    }
+//                }
+//            }
             .transformable(state = state)
             .graphicsLayer(
                 scaleX = scale,

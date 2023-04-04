@@ -5,15 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material.Snackbar
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.okei.med.R
 import ru.okei.med.domain.model.StateGame
 import ru.okei.med.feature.theme.White95
 import ru.okei.med.feature.theme.montserratFont
@@ -95,7 +98,9 @@ private fun HorizontalRatingGame(
         AppTopBar()
         Row {
             RowWithWrap(
-                modifier = Modifier.weight(1f).fillMaxHeight(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight(),
                 verticalSpacer = 30.dp,
                 horizontalSpacer = 30.dp
             ){
@@ -110,7 +115,9 @@ private fun HorizontalRatingGame(
             }
             if(statusGame.isEndGame){
                 Column(
-                    Modifier.weight(0.75f).fillMaxHeight(),
+                    Modifier
+                        .weight(0.75f)
+                        .fillMaxHeight(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.weight(1f))

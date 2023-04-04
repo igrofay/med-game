@@ -20,7 +20,7 @@
     <string name="network_error">Сетевая ошибка</string>
     <string name="skip">Пропустить</string>
     <string name="start_game">Начать игру!</string>
-    <string name="layer_battles">Сражения с игроками</string>
+    <string name="module_battles">Сражения по модулю</string>
     <string name="battle_rating">Сражение Рейтинг</string>
     <string name="friends">Друзья</string>
     <string name="rating">Рейтинг</string>
@@ -29,7 +29,11 @@
     <string name="looking_for_your_opponent">Ищем вам противника…</string>
     <string name="opposites_found">Противник найден!</string>
     <string name="cancel">Отмена</string>
+    <string name="you_have_earned">Вы заработали</string>
     <string name="connecting">Соединяемся…</string>
     <string name="rerly">Ответить</string>
     <string name="enter_answer">Введите ответ</string>
+    <string name="already_giving_up">Уже сдаетесь?</string>
+    <string name="if_you_leave_you_will_be_awarded_a_defeat">Если вы уйдете, вам будет присуждено поражение</string>
+    <string name="surrender">Сдаться</string>
 </resources>

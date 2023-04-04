@@ -113,9 +113,12 @@ class FriendsVM @Inject constructor(
     private fun getFriendList(){
         job?.cancel()
         job = viewModelScope.launch {
-            getFriendsUseCase.execute().onSuccess { friends ->
-                _state.value = FriendsState.FriendList(friends)
-            }.onFailure(::errorProcessing)
+            while (true){
+                getFriendsUseCase.execute().onSuccess { friends ->
+                    _state.value = FriendsState.FriendList(friends)
+                }.onFailure(::errorProcessing)
+                delay(3000L)
+            }
         }
     }
 

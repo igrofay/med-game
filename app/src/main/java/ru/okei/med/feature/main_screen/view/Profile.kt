@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import ru.okei.med.R
 import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.feature.theme.DenseBlue
@@ -23,7 +22,7 @@ fun Profile(
     ItemProfileBox(
         image = profile.urlIcon,
         name = profile.nickname,
-        email = profile.mail,
+        email = profile.email,
         sizeBox = sizeBoxProfile,
         background = Purple,
         clickable = editProfile

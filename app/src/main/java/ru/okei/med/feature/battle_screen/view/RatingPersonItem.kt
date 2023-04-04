@@ -147,7 +147,7 @@ fun RatingPersonItem(
     }
 }
 
-private fun formatPointsText(number:Int):String{
+fun formatPointsText(number:Int):String{
     if(number in 10..19) return "Баллов"
     return when(number%10){
         1 -> "Балл"

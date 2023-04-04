@@ -6,7 +6,7 @@ import kotlinx.serialization.Transient
 @Serializable
 data class ProfileBody(
     var nickname:String = "",
-    var mail:String = "",
+    var email:String = "",
     var urlIcon: String = "",
     var department: Department = Department.Anatomy,
 )

@@ -14,14 +14,14 @@ class AuthRepositoryImpl(
     private val client: HttpClient
 ): AuthRepository {
     override suspend fun signIn(email: String, password: String): TokensBody {
-        return client.post(urlString = "/sign_in"){
+        return client.post(urlString = "/signin"){
             contentType(ContentType.Application.Json)
             setBody(SignInBody(email,password))
         }.body()
     }
 
     override suspend fun signUp(email: String, nickname: String, password: String): TokensBody {
-        return client.post(urlString = "/sign_up"){
+        return client.post(urlString = "/signup"){
             contentType(ContentType.Application.Json)
             setBody(SignUpBody(email,nickname, password))
         }.body()

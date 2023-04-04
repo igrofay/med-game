@@ -21,6 +21,6 @@ data class StateGame(
         val passPercentage
             get() = countOfPoints/maxPointsGame.toFloat()*100
         val lastCountOfPoints
-            get() = countOfPoints - pointGain;
+            get() = countOfPoints - pointGain
     }
 }

@@ -15,7 +15,7 @@ fun Games(
 ) {
     ItemActionBox(
         image = R.drawable.trophy,
-        label = stringResource(R.string.layer_battles),
+        label = stringResource(R.string.module_battles),
         sizeBox = sizeBox,
         background = Purple
     ) {
@@ -29,4 +29,5 @@ fun Games(
     ) {
         battleRating()
     }
+
 }

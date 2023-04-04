@@ -36,7 +36,7 @@ class RatingVM @Inject constructor(
                     profile = getProfileUseCase.execute().getOrThrow()
                 }
                 getRatingInfoUseCase.execute().onSuccess {ratingInfo->
-                    _state.value = RatingState.RatingList(ratingInfo,profile!!.mail)
+                    _state.value = RatingState.RatingList(ratingInfo,profile!!.email)
                 }.onFailure(::errorProcessing)
             }catch (e:Throwable){
                 errorProcessing(e)
