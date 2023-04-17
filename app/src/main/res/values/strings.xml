@@ -22,6 +22,7 @@
     <string name="start_game">Начать игру!</string>
     <string name="module_battles">Сражения по модулю</string>
     <string name="battle_rating">Сражение Рейтинг</string>
+    <string name="single_battle">Одиночное сражение</string>
     <string name="friends">Друзья</string>
     <string name="rating">Рейтинг</string>
     <string name="loading">Загрузка…</string>
@@ -36,4 +37,5 @@
     <string name="already_giving_up">Уже сдаетесь?</string>
     <string name="if_you_leave_you_will_be_awarded_a_defeat">Если вы уйдете, вам будет присуждено поражение</string>
     <string name="surrender">Сдаться</string>
+    <string name="await_friend">Ждем друга</string>
 </resources>

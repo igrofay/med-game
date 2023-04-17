@@ -13,8 +13,7 @@ import ru.okei.med.domain.model.ProfileBody
 import ru.okei.med.domain.model.QuestionBody
 import ru.okei.med.domain.model.StateGame
 import ru.okei.med.domain.model.TypeBattle
-import ru.okei.med.domain.model.TypeBattle.Rating
-import ru.okei.med.domain.model.TypeBattle.Simple
+import ru.okei.med.domain.model.TypeBattle.*
 import ru.okei.med.domain.repos.BattleRepository
 import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 import ru.okei.med.feature.base.EventBase
@@ -31,6 +30,7 @@ class BattleVM @Inject constructor(
 ) : ViewModel(), EventBase<BattleEvent> {
     private var currentQuestion = 0
     private val typeBattle = TypeBattle.valueOf(savedStateHandle.get<String>("typeBattle")!!)
+    private val emailFriend = savedStateHandle.get<String>("emailFriend")
     private val _state = mutableStateOf<BattleState>(BattleState.Loading())
     val state: State<BattleState> get() = _state
 
@@ -58,6 +58,9 @@ class BattleVM @Inject constructor(
             },
             newRatingTable = { rating ->
                 _state.value = BattleState.ViewRatingGame(rating)
+            },
+            fightCanceled = {
+
             }
         )
         when(typeBattle){
@@ -73,6 +76,24 @@ class BattleVM @Inject constructor(
             Rating -> {
                 fightWithEnemy.search()
                 _state.value = BattleState.FindingEnemy
+            }
+            TypeBattle.Single -> {
+                viewModelScope.launch {
+                    runCatching {
+                        battleRepository.getModules(department)
+                    }.onSuccess { modules ->
+                        _state.value = BattleState.ModuleSelection(modules)
+                    }.onFailure(::errorProcessing)
+                }
+            }
+            TypeBattle.WithFriend ->{
+                viewModelScope.launch {
+                    runCatching {
+                        battleRepository.getModules(department)
+                    }.onSuccess { modules ->
+                        _state.value = BattleState.ModuleSelection(modules)
+                    }.onFailure(::errorProcessing)
+                }
             }
         }
     }
@@ -96,8 +117,9 @@ class BattleVM @Inject constructor(
                 fightWithEnemy.close()
             }
             is BattleEvent.ChosenModule -> {
-                fightWithEnemy.search(event.module)
-                _state.value = BattleState.FindingEnemy
+                fightWithEnemy.search(event.module, emailFriend)
+                _state.value = if (typeBattle == WithFriend) BattleState.WaitingFriend
+                else BattleState.FindingEnemy
             }
         }
     }

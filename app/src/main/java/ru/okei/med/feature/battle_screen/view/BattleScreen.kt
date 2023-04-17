@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
@@ -42,8 +41,9 @@ fun BattleScreen(
         }
     }
     when(state){
-        BattleState.FindingEnemy ->
+        BattleState.FindingEnemy, BattleState.WaitingFriend ->
             FindingEnemy(
+                isWaitFriend = state is BattleState.WaitingFriend,
                 exit = {
                     battleVM.onEvent(BattleEvent.Cancel)
                     goToBack()

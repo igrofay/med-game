@@ -31,7 +31,6 @@ import ru.okei.med.feature.widget.RowWithWrap
 @Composable
 fun MainScreen(
     layerBattles:(String)->Unit,
-    battleRating:(String)->Unit,
     editProfile:()->Unit,
     openFriend: ()->Unit,
     openRating : ()->Unit,
@@ -67,8 +66,7 @@ fun MainScreen(
             ){
                 Games(
                     sizeBox = sizeBoxItems,
-                    layerBattles = { layerBattles(TypeBattle.Simple.name) },
-                    battleRating = { battleRating(TypeBattle.Rating.name)}
+                    battle = {layerBattles(it.name)}
                 )
                 Profile(
                     profile = state.profileBody,

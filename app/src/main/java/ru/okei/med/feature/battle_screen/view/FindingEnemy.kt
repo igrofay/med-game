@@ -29,11 +29,12 @@ import ru.okei.med.feature.widget.CustomButton
 
 @Composable
 fun FindingEnemy(
+    isWaitFriend: Boolean,
     exit:()->Unit
 ) {
     when(LocalConfiguration.current.orientation){
-        Configuration.ORIENTATION_PORTRAIT -> VerticalFindingEnemy(exit)
-        else -> HorizontalFindingEnemy(exit)
+        Configuration.ORIENTATION_PORTRAIT -> VerticalFindingEnemy(isWaitFriend,exit)
+        else -> HorizontalFindingEnemy(isWaitFriend,exit)
     }
 }
 
@@ -53,6 +54,7 @@ private fun animateBlink() : Float {
 
 @Composable
 private fun VerticalFindingEnemy(
+    isAwaitFriend: Boolean,
     exit:()->Unit
 ) {
     BoxWithConstraints(
@@ -87,7 +89,10 @@ private fun VerticalFindingEnemy(
                     .weight(1f)
                     .background(Color.Gray.copy(0.4f)))
                 Text(
-                    text = stringResource(R.string.looking_for_your_opponent),
+                    text = stringResource(
+                        if(isAwaitFriend) R.string.await_friend
+                        else R.string.looking_for_your_opponent
+                    ),
                     fontFamily = montserratFont,
                     fontWeight = FontWeight.W600,
                     fontSize = 14.sp,
@@ -112,6 +117,7 @@ private fun VerticalFindingEnemy(
 
 @Composable
 private fun HorizontalFindingEnemy(
+    isAwaitFriend: Boolean,
     exit:()->Unit
 ) {
     Row {

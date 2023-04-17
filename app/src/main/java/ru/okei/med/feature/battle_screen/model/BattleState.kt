@@ -6,6 +6,7 @@ import ru.okei.med.domain.model.StateGame
 sealed class BattleState {
     class ModuleSelection(val modules: List<String>): BattleState()
     object FindingEnemy : BattleState()
+    object WaitingFriend : BattleState()
     class Loading(val load: Load= Load.Simple): BattleState(){
         enum class Load{
             Simple, EnemyConnection,

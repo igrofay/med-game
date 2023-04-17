@@ -45,21 +45,21 @@ fun RatingPersonItem(
         mutableStateOf(true)
     }
     LaunchedEffect(Unit){
-        delay(700)
+        delay(600)
         visibleImagePerson = false
     }
     val percentage by animateFloatAsState(
         targetValue = if(visibleImagePerson) rating.passLastPercentage else rating.passPercentage,
         animationSpec = tween(
-            durationMillis = 800,
-            delayMillis = 300
+            durationMillis = 900,
+            delayMillis = 250
         )
     )
     val countOfPoints by animateIntAsState(
         targetValue = if(visibleImagePerson) rating.lastCountOfPoints else rating.countOfPoints,
         animationSpec = tween(
-            durationMillis = 800,
-            delayMillis = 300
+            durationMillis = 900,
+            delayMillis = 250
         )
     )
     Column(
@@ -132,7 +132,7 @@ fun RatingPersonItem(
             androidx.compose.animation.AnimatedVisibility(
                 visible = visibleImagePerson,
                 enter = scaleIn(),
-                exit = scaleOut(tween(durationMillis = 300)),
+                exit = scaleOut(tween(durationMillis = 250)),
             ) {
                 GlideImage(
                     imageModel = rating.image,

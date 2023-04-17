@@ -29,7 +29,7 @@ object AppModule {
     //192.168.144.66:8080//
     //192.168.0.107:5121
     //176.28.64.201:3436
-    private const val urlServer = "http://192.168.0.104:5121"
+    private const val urlServer = "http://192.168.144.53:5121"
     private const val keySharedPreferences = "keySharedPreferences"
 
     @Provides
@@ -58,8 +58,9 @@ object AppModule {
             }
         }
         client.plugin(HttpSend).intercept { request ->
+            Log.e("intercept::request",request.url.toString())
             execute(request).apply {
-                Log.e("intercept",this.request.url.toString() +" "+  this.response.status.value.toString())
+                Log.e("intercept::answer",this.request.url.toString() +" "+  this.response.status.value.toString())
             }
         }
         return client

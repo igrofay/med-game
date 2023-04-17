@@ -7,5 +7,6 @@ import ru.okei.med.domain.model.TypeBattle
 data class SettingRoomBody(
     val nameModule:String?,
     val nameDepartment:String,
-    val type: TypeBattle
+    val type: TypeBattle,
+    val countPlayers: Int = 2,
 )

@@ -15,6 +15,7 @@ import ru.okei.med.domain.use_case.frends.GetFriendsUseCase
 import ru.okei.med.domain.use_case.frends.GetUserWithSuchNameUseCase
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.friends.model.FriendsEvent
+import ru.okei.med.feature.friends.model.FriendsSideEffect
 import ru.okei.med.feature.friends.model.FriendsState
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
@@ -29,7 +30,8 @@ class FriendsVM @Inject constructor(
     val state: State<FriendsState> get() = _state
     private var searchUsersText = AtomicReference("")
     private var job: Job? = null
-
+    private val _sideEffect = mutableStateOf<FriendsSideEffect?>(null)
+    val sideEffect: State<FriendsSideEffect?> get() = _sideEffect
 
     init {
         getFriendList()
@@ -88,6 +90,7 @@ class FriendsVM @Inject constructor(
                 }
             }
             FriendsEvent.GetFriendList -> getFriendList()
+            is FriendsEvent.FightFriendRequest -> TODO()
         }
     }
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.okei.med.feature.friends.model.FriendsEvent
+import ru.okei.med.feature.friends.model.FriendsSideEffect
 import ru.okei.med.feature.friends.model.FriendsState
 import ru.okei.med.feature.friends.view_model.FriendsVM
 import ru.okei.med.feature.theme.DenseBlue
@@ -36,9 +37,18 @@ import ru.okei.med.feature.widget.RetryRequest
 
 @Composable
 fun FriendsScreen(
-    friendsVM: FriendsVM = hiltViewModel()
+    friendsVM: FriendsVM = hiltViewModel(),
+    goToFightWithFriend: (String)->Unit,
 ) {
     val state by remember { friendsVM.state }
+    val sideEffect by friendsVM.sideEffect
+    LaunchedEffect(sideEffect){
+        when(val objectSideEffect = sideEffect){
+            is FriendsSideEffect.GoToFightWithFriend ->
+                goToFightWithFriend(objectSideEffect.email)
+            null -> {}
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()

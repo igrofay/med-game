@@ -172,113 +172,151 @@ fun SettingsItem(
         modifier = Modifier
             .fillMaxSize()
             .graphicsLayer { rotationX = 180f }
-            .background(backgroundColor),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        when(friendStatus){
-            FriendInfo.FriendStatus.Friend -> {
+            .background(backgroundColor)
+    ) {
+        if (friendStatus == FriendInfo.FriendStatus.Friend){
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
                 Text(
-                    text = "Удалить из друзей",
+                    text = "Бой",
                     fontSize = settingsSiteText,
                     fontWeight = FontWeight.W600,
                     color = White95,
                     fontFamily = montserratFont
                 )
+                IconButton(
+                    onClick = { action.invoke(FriendsEvent.FightFriendRequest(email)) },
+                    modifier = Modifier
+                        .size(iconSize)
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_games_selected),
+                        contentDescription = null,
+                        tint = White95,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
-            FriendInfo.FriendStatus.ApplicationSent -> {
-                Text(
-                    text = "Отменить заявку",
-                    fontSize = settingsSiteText,
-                    fontWeight = FontWeight.W600,
-                    color = White95,
-                    fontFamily = montserratFont
-                )
-            }
-            FriendInfo.FriendStatus.Subscriber -> {
-                Text(
-                    text = "Принять заявку",
-                    fontSize = settingsSiteText,
-                    fontWeight = FontWeight.W600,
-                    color = White95,
-                    fontFamily = montserratFont
-                )
-            }
-            FriendInfo.FriendStatus.NotFriends -> {
-                Text(
-                    text = "Отправить заявку",
-                    fontSize = settingsSiteText,
-                    fontWeight = FontWeight.W600,
-                    color = White95,
-                    fontFamily = montserratFont
-                )
-            }
+            Spacer(modifier = Modifier
+                .width(1.dp)
+                .fillMaxHeight(0.9f)
+                .background(Color.White.copy(0.6f))
+            )
         }
-        when(friendStatus){
-            FriendInfo.FriendStatus.Friend -> {
-                IconButton(
-                    onClick = { action.invoke(FriendsEvent.DeleteFriend(email)) },
-                    modifier = Modifier
-                        .size(iconSize)
-                        .padding(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
-                        tint = White95,
-                        modifier = Modifier.fillMaxSize()
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            when(friendStatus){
+                FriendInfo.FriendStatus.Friend -> {
+                    Text(
+                        text = "Удалить из друзей",
+                        fontSize = settingsSiteText,
+                        fontWeight = FontWeight.W600,
+                        color = White95,
+                        fontFamily = montserratFont
+                    )
+                }
+                FriendInfo.FriendStatus.ApplicationSent -> {
+                    Text(
+                        text = "Отменить заявку",
+                        fontSize = settingsSiteText,
+                        fontWeight = FontWeight.W600,
+                        color = White95,
+                        fontFamily = montserratFont
+                    )
+                }
+                FriendInfo.FriendStatus.Subscriber -> {
+                    Text(
+                        text = "Принять заявку",
+                        fontSize = settingsSiteText,
+                        fontWeight = FontWeight.W600,
+                        color = White95,
+                        fontFamily = montserratFont
+                    )
+                }
+                FriendInfo.FriendStatus.NotFriends -> {
+                    Text(
+                        text = "Отправить заявку",
+                        fontSize = settingsSiteText,
+                        fontWeight = FontWeight.W600,
+                        color = White95,
+                        fontFamily = montserratFont
                     )
                 }
             }
-            FriendInfo.FriendStatus.ApplicationSent ->{
-                IconButton(
-                    onClick = { action.invoke(FriendsEvent.CanselFriendRequest(email)) },
-                    modifier = Modifier
-                        .size(iconSize)
-                        .padding(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = White95,
+            when(friendStatus){
+                FriendInfo.FriendStatus.Friend -> {
+                    IconButton(
+                        onClick = { action.invoke(FriendsEvent.DeleteFriend(email)) },
                         modifier = Modifier
-                            .fillMaxSize()
-                            .rotate(45f)
-                    )
+                            .size(iconSize)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = null,
+                            tint = White95,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
-            }
-            FriendInfo.FriendStatus.Subscriber ->{
-                IconButton(
-                    onClick = { action.invoke(FriendsEvent.AcceptFriendRequest(email)) },
-                    modifier = Modifier
-                        .size(iconSize)
-                        .padding(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = White95,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                FriendInfo.FriendStatus.ApplicationSent ->{
+                    IconButton(
+                        onClick = { action.invoke(FriendsEvent.CanselFriendRequest(email)) },
+                        modifier = Modifier
+                            .size(iconSize)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = White95,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .rotate(45f)
+                        )
+                    }
                 }
-            }
-            FriendInfo.FriendStatus.NotFriends -> {
-                IconButton(
-                    onClick = { action.invoke(FriendsEvent.SendFriendRequest(email)) },
-                    modifier = Modifier
-                        .size(iconSize)
-                        .padding(8.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = null,
-                        tint = White95,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                FriendInfo.FriendStatus.Subscriber ->{
+                    IconButton(
+                        onClick = { action.invoke(FriendsEvent.AcceptFriendRequest(email)) },
+                        modifier = Modifier
+                            .size(iconSize)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = White95,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
+                FriendInfo.FriendStatus.NotFriends -> {
+                    IconButton(
+                        onClick = { action.invoke(FriendsEvent.SendFriendRequest(email)) },
+                        modifier = Modifier
+                            .size(iconSize)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = White95,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
             }
         }
     }
+
 }
 
 

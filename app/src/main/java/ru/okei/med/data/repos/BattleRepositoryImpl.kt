@@ -6,12 +6,25 @@ import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import ru.okei.med.data.model.SettingRoomBody
+import ru.okei.med.domain.model.RequestForFight
 import ru.okei.med.domain.model.TypeBattle
 import ru.okei.med.domain.repos.BattleRepository
 
 class BattleRepositoryImpl(
     private val client: HttpClient
 ): BattleRepository {
+    override suspend fun getRequestForFight(tokenAccess: String): RequestForFight {
+        return client.get("/room/requests"){
+            header(HttpHeaders.Authorization, tokenAccess)
+        }.body()
+    }
+
+    override suspend fun refuseRequest(tokenAccess: String, tokenRoom: String) {
+        client.delete("/room/${tokenRoom}"){
+            header(HttpHeaders.Authorization, tokenAccess)
+        }
+    }
+
 
     override suspend fun getModules(department:String): List<String> {
         return client.get("/module/${department}").body()
@@ -21,6 +34,7 @@ class BattleRepositoryImpl(
         tokenAccess:String,
         department:String,
         module:String,
+        countPlayers: Int,
         connection: suspend DefaultClientWebSocketSession.() -> Unit
     ) {
         client.webSocket(
@@ -34,7 +48,8 @@ class BattleRepositoryImpl(
                 sendSerialized(SettingRoomBody(
                     nameModule = module,
                     nameDepartment = department,
-                    type = TypeBattle.Simple
+                    type = TypeBattle.Simple,
+                    countPlayers = countPlayers
                 ))
                 connection()
             }
@@ -58,6 +73,31 @@ class BattleRepositoryImpl(
                     nameModule = null,
                     nameDepartment = department,
                     type = TypeBattle.Rating
+                ))
+                connection()
+            }
+        )
+    }
+
+    override suspend fun searchForFriendModule(
+        tokenAccess: String,
+        emailFriend: String,
+        department: String,
+        module: String,
+        connection: suspend DefaultClientWebSocketSession.() -> Unit
+    ) {
+        client.webSocket(
+            method = HttpMethod.Get,
+            path = "/main/$emailFriend",
+            request = {
+                header(HttpHeaders.Authorization, tokenAccess)
+                url.protocol = URLProtocol.WS
+            },
+            block = {
+                sendSerialized(SettingRoomBody(
+                    nameModule = module,
+                    nameDepartment = department,
+                    type = TypeBattle.Simple,
                 ))
                 connection()
             }
