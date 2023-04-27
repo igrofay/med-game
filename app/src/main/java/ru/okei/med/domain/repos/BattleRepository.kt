@@ -5,7 +5,7 @@ import ru.okei.med.domain.model.RequestForFight
 
 interface BattleRepository {
 
-    suspend fun getRequestForFight(tokenAccess:String) : RequestForFight
+    suspend fun getRequestForFight(tokenAccess:String) : RequestForFight?
 
     suspend fun refuseRequest(tokenAccess:String,tokenRoom: String)
     suspend fun getModules(department:String): List<String>

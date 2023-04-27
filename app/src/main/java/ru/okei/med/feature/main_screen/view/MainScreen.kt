@@ -1,5 +1,6 @@
 package ru.okei.med.feature.main_screen.view
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,8 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.okei.med.R
-import ru.okei.med.domain.model.TypeBattle
 import ru.okei.med.feature.main_screen.model.MainEvent
+import ru.okei.med.feature.main_screen.model.MainSideEffect
 import ru.okei.med.feature.main_screen.view_model.MainVM
 import ru.okei.med.feature.theme.montserratFont
 import ru.okei.med.feature.widget.RowWithWrap
@@ -34,6 +35,7 @@ fun MainScreen(
     editProfile:()->Unit,
     openFriend: ()->Unit,
     openRating : ()->Unit,
+    openFightWithFriend: (String)-> Unit,
     mainVM : MainVM = hiltViewModel(),
 ) {
     LaunchedEffect(Unit){
@@ -41,42 +43,55 @@ fun MainScreen(
     }
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val state by remember { mainVM.state }
-    val errorMessage by mainVM.error
+    val sideEffect by mainVM.sideEffect
     val sizeBoxItems = DpSize(155.dp,155.dp)
     val sizeBoxItemProfile = DpSize(318.dp,155.dp)
-    LaunchedEffect(errorMessage){
-        errorMessage?.message?.let {
-            scaffoldState.snackbarHostState.showSnackbar(it)
+    LaunchedEffect(sideEffect){
+        when(val lSideEffect = sideEffect){
+            is MainSideEffect.GoToFightWithFriend -> {
+                Log.e("dwa", "wda")
+                openFightWithFriend.invoke(lSideEffect.tokenRoom)
+                mainVM.onEvent(MainEvent.ClearSideEffect)
+            }
+            is MainSideEffect.ShowMessage -> {
+                scaffoldState.snackbarHostState.showSnackbar(lSideEffect.message)
+                mainVM.onEvent(MainEvent.ClearSideEffect)
+            }
+            null -> {}
         }
     }
     Scaffold(
         scaffoldState = scaffoldState,
         backgroundColor = Color.Transparent
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 10.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Header()
-            RowWithWrap(
-                modifier = Modifier.fillMaxWidth(),
-                verticalSpacer = 8.dp, horizontalSpacer = 8.dp
-            ){
-                Games(
-                    sizeBox = sizeBoxItems,
-                    battle = {layerBattles(it.name)}
-                )
-                Profile(
-                    profile = state.profileBody,
-                    sizeBoxProfile = sizeBoxItemProfile,
-                    sizeBoxItems = sizeBoxItems,
-                    editProfile = editProfile,
-                    openFriend = openFriend,
-                    openRating = openRating
-                )
+        Box(modifier = Modifier.fillMaxSize()){
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 10.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Header()
+                RowWithWrap(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalSpacer = 8.dp, horizontalSpacer = 8.dp
+                ){
+                    Games(
+                        sizeBox = sizeBoxItems,
+                        battle = {layerBattles(it.name)}
+                    )
+                    Profile(
+                        profile = state.profileBody,
+                        sizeBoxProfile = sizeBoxItemProfile,
+                        sizeBoxItems = sizeBoxItems,
+                        editProfile = editProfile,
+                        openFriend = openFriend,
+                        openRating = openRating
+                    )
+                }
             }
+            BoxRequestFight(state.requestForFight, mainVM)
         }
     }
 }

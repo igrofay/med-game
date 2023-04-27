@@ -58,7 +58,7 @@ object AppModule {
             }
         }
         client.plugin(HttpSend).intercept { request ->
-            Log.e("intercept::request",request.url.toString())
+            Log.e("intercept::request",request.url.host)
             execute(request).apply {
                 Log.e("intercept::answer",this.request.url.toString() +" "+  this.response.status.value.toString())
             }

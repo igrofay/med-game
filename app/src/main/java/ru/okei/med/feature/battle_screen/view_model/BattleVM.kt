@@ -18,6 +18,7 @@ import ru.okei.med.domain.repos.BattleRepository
 import ru.okei.med.domain.use_case.profile.GetProfileUseCase
 import ru.okei.med.feature.base.EventBase
 import ru.okei.med.feature.battle_screen.model.BattleEvent
+import ru.okei.med.feature.battle_screen.model.BattleSideEffect
 import ru.okei.med.feature.battle_screen.model.BattleState
 import javax.inject.Inject
 
@@ -30,9 +31,12 @@ class BattleVM @Inject constructor(
 ) : ViewModel(), EventBase<BattleEvent> {
     private var currentQuestion = 0
     private val typeBattle = TypeBattle.valueOf(savedStateHandle.get<String>("typeBattle")!!)
-    private val emailFriend = savedStateHandle.get<String>("emailFriend")
+    private val emailFriend = savedStateHandle.get<String?>("emailFriend")
+    private val tokenRoom = savedStateHandle.get<String>("tokenRoom")
     private val _state = mutableStateOf<BattleState>(BattleState.Loading())
     val state: State<BattleState> get() = _state
+    private val _sideEffect = mutableStateOf<BattleSideEffect?>(null)
+    val sideEffect: State<BattleSideEffect?> get() = _sideEffect
 
     init {
         viewModelScope.launch {
@@ -42,7 +46,7 @@ class BattleVM @Inject constructor(
         }
     }
 
-    private fun initThis(department:String){
+    private fun initThis(department: String) {
         fightWithEnemy.init(
             department,
             typeBattle,
@@ -60,10 +64,10 @@ class BattleVM @Inject constructor(
                 _state.value = BattleState.ViewRatingGame(rating)
             },
             fightCanceled = {
-
+                _sideEffect.value = BattleSideEffect.ShowMessage("Пользователь отказался")
             }
         )
-        when(typeBattle){
+        when (typeBattle) {
             Simple -> {
                 viewModelScope.launch {
                     runCatching {
@@ -86,32 +90,39 @@ class BattleVM @Inject constructor(
                     }.onFailure(::errorProcessing)
                 }
             }
-            TypeBattle.WithFriend ->{
-                viewModelScope.launch {
-                    runCatching {
-                        battleRepository.getModules(department)
-                    }.onSuccess { modules ->
-                        _state.value = BattleState.ModuleSelection(modules)
-                    }.onFailure(::errorProcessing)
+            TypeBattle.WithFriend -> {
+                if (emailFriend != "null") {
+                    viewModelScope.launch {
+                        runCatching {
+                            battleRepository.getModules(department)
+                        }.onSuccess { modules ->
+                            _state.value = BattleState.ModuleSelection(modules)
+                        }.onFailure(::errorProcessing)
+                    }
+                }
+                if (tokenRoom != "null") {
+                    _state.value = BattleState.Loading(BattleState.Loading.Load.EnemyConnection)
+                    fightWithEnemy.searchRoom(tokenRoom!!)
                 }
             }
         }
     }
 
-    private fun errorProcessing(e:Throwable){
-        when(e){
-            else ->{
-                Log.e("BattleVM",e.message.toString())
+    private fun errorProcessing(e: Throwable) {
+        when (e) {
+            else -> {
+                Log.e("BattleVM", e.message.toString())
             }
         }
     }
 
     override fun onEvent(event: BattleEvent) {
-        when(event){
+        when (event) {
             is BattleEvent.Reply -> {
                 if ((_state.value as BattleState.QuestionForm).userAnswer != null) return
                 fightWithEnemy.reply(event.answerOption)
-                _state.value = (_state.value as BattleState.QuestionForm).copy(userAnswer = event.answerOption)
+                _state.value =
+                    (_state.value as BattleState.QuestionForm).copy(userAnswer = event.answerOption)
             }
             BattleEvent.Cancel -> {
                 fightWithEnemy.close()
@@ -124,37 +135,59 @@ class BattleVM @Inject constructor(
         }
     }
 
-    private fun test1(){
-                _state.value = BattleState.QuestionForm(
+    private fun test1() {
+        _state.value = BattleState.QuestionForm(
             QuestionBody(
                 QuestionBody.TypeQuestion.Image,
                 "Какая мышца в теле человека является самой крупной?",
                 "Какая мышца в теле человека является самой крупной?",
                 "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg",
                 100,
-                rightAnswer = QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Plech","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
+                rightAnswer = QuestionBody.AnswerOption(
+                    QuestionBody.TypeAnswer.Image,
+                    "Plech",
+                    "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"
+                ),
                 listOf(
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Плечевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Спиной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Черепной","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"),
-                    QuestionBody.AnswerOption(QuestionBody.TypeAnswer.Image,"Кистевой","https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg")
+                    QuestionBody.AnswerOption(
+                        QuestionBody.TypeAnswer.Image,
+                        "Плечевой",
+                        "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"
+                    ),
+                    QuestionBody.AnswerOption(
+                        QuestionBody.TypeAnswer.Image,
+                        "Спиной",
+                        "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"
+                    ),
+                    QuestionBody.AnswerOption(
+                        QuestionBody.TypeAnswer.Image,
+                        "Черепной",
+                        "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"
+                    ),
+                    QuestionBody.AnswerOption(
+                        QuestionBody.TypeAnswer.Image,
+                        "Кистевой",
+                        "https://medexpert-vl.ru/wp-content/uploads/rentgen-scaled-1.jpg"
+                    )
                 )
             ), null,
             5
         )
     }
-    private fun test2(){
+
+    private fun test2() {
         _state.value = BattleState.ViewRatingGame(
             StateGame(
                 isEndGame = false,
                 rating = listOf(
-                    StateGame.GamePointsRating("oleg",
+                    StateGame.GamePointsRating(
+                        "oleg",
                         "https://assets.gq.ru/photos/5d9f4654cd52870008328b53/master/w_1600,c_limit/05.jpg",
                         5,
                         10,
                         5,
                     ),
-                    StateGame.GamePointsRating("Максим гудеев", "", 9, 10, 3,)
+                    StateGame.GamePointsRating("Максим гудеев", "", 9, 10, 3)
                 ),
                 "Максим гудеев"
             )

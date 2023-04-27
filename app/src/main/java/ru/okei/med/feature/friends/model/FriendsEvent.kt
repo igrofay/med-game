@@ -9,4 +9,5 @@ sealed class FriendsEvent {
     class CanselFriendRequest(val email: String): FriendsEvent()
     class AcceptFriendRequest(val email: String): FriendsEvent()
     class FightFriendRequest(val email: String) : FriendsEvent()
+    object ClearSide : FriendsEvent()
 }

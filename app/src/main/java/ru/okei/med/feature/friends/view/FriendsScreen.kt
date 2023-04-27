@@ -1,5 +1,6 @@
 package ru.okei.med.feature.friends.view
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -44,15 +45,17 @@ fun FriendsScreen(
     val sideEffect by friendsVM.sideEffect
     LaunchedEffect(sideEffect){
         when(val objectSideEffect = sideEffect){
-            is FriendsSideEffect.GoToFightWithFriend ->
+            is FriendsSideEffect.GoToFightWithFriend -> {
+                friendsVM.onEvent(FriendsEvent.ClearSide)
                 goToFightWithFriend(objectSideEffect.email)
+            }
             null -> {}
         }
     }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 32.dp, start = 20.dp, end = 20.dp)
+            .padding(top = 32.dp,)
     ){
         SearchUser(friendsVM::onEvent)
         Spacer(modifier = Modifier.height(24.dp))
@@ -88,6 +91,7 @@ private fun SearchUser(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 20.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(DenseBlue)
             .padding(12.dp),

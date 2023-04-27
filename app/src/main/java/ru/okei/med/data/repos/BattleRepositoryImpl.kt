@@ -2,9 +2,11 @@ package ru.okei.med.data.repos
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import ru.okei.med.data.model.SettingRoomBody
 import ru.okei.med.domain.model.RequestForFight
 import ru.okei.med.domain.model.TypeBattle
@@ -13,10 +15,15 @@ import ru.okei.med.domain.repos.BattleRepository
 class BattleRepositoryImpl(
     private val client: HttpClient
 ): BattleRepository {
-    override suspend fun getRequestForFight(tokenAccess: String): RequestForFight {
-        return client.get("/room/requests"){
+    override suspend fun getRequestForFight(tokenAccess: String): RequestForFight? {
+        val answer =  client.get("/room/requests"){
             header(HttpHeaders.Authorization, tokenAccess)
-        }.body()
+        }
+        return when(answer.status){
+            HttpStatusCode.NoContent -> null
+            HttpStatusCode.OK -> answer.body()
+            else -> null
+        }
     }
 
     override suspend fun refuseRequest(tokenAccess: String, tokenRoom: String) {

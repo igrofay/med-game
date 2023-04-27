@@ -20,7 +20,7 @@ fun UserList(
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 12.dp),
+        contentPadding = PaddingValues(vertical = 12.dp, horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         items(

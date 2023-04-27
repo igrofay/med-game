@@ -22,7 +22,7 @@ fun NavGraphBuilder.navMainContent(
         composable(RoutingMainContent.Main.route) {
             MainScreen(
                 layerBattles = { type ->
-                    navController.navigate(RoutingMainContent.Battle.argRoute(type, null)) {
+                    navController.navigate(RoutingMainContent.Battle.argRoute(type, null, null)) {
                         popUpTo(RoutingMainContent.Main.route)
                     }
                 },
@@ -41,13 +41,23 @@ fun NavGraphBuilder.navMainContent(
                         popUpTo(RoutingMainContent.Main.route)
                     }
                 },
+                openFightWithFriend = {tokenRoom->
+                    navController.navigate(RoutingMainContent.Battle.argRoute(
+                        TypeBattle.WithFriend.name,
+                        null,
+                        tokenRoom
+                    )) {
+                        popUpTo(RoutingMainContent.Main.route)
+                    }
+                }
             )
         }
         composable(
             RoutingMainContent.Battle.argRoute(),
             arguments = listOf(
                 navArgument("typeBattle") { type = NavType.StringType },
-                navArgument("emailFriend") { type = NavType.StringType }
+                navArgument("emailFriend") { type = NavType.StringType },
+                navArgument("tokenRoom") { type = NavType.StringType}
             )
         ) {
             BattleScreen {
@@ -62,7 +72,8 @@ fun NavGraphBuilder.navMainContent(
                 navController.navigate(
                     RoutingMainContent.Battle.argRoute(
                         TypeBattle.WithFriend.name,
-                        email
+                        email,
+                        null
                     )
                 ) {
                     popUpTo(RoutingMainContent.Friends.route)

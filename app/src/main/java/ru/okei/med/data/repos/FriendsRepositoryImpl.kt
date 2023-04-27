@@ -8,13 +8,11 @@ import io.ktor.http.*
 import ru.okei.med.domain.model.FriendInfo
 import ru.okei.med.domain.repos.FriendsRepository
 
-class FriendsRepositoryImpl(val httpClient: HttpClient): FriendsRepository {
+class FriendsRepositoryImpl(private val httpClient: HttpClient): FriendsRepository {
 
     override suspend fun getFriends(token:String): List<FriendInfo> {
         return httpClient.get("/friends"){
             header(HttpHeaders.Authorization, token)
-        }.apply {
-            println(bodyAsText())
         }.body()
     }
 

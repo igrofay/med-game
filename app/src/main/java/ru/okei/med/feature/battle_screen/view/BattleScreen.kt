@@ -4,8 +4,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +21,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import ru.okei.med.R
 import ru.okei.med.feature.battle_screen.model.BattleEvent
+import ru.okei.med.feature.battle_screen.model.BattleSideEffect
 import ru.okei.med.feature.battle_screen.model.BattleState
 import ru.okei.med.feature.battle_screen.view_model.BattleVM
 import ru.okei.med.feature.theme.montserratFont
@@ -28,45 +31,62 @@ fun BattleScreen(
     battleVM: BattleVM = hiltViewModel(),
     goToBack: ()->Unit
 ) {
+    val sideEffect by battleVM.sideEffect
+    val scaffoldState = rememberScaffoldState()
+    LaunchedEffect(sideEffect){
+        when(val lSideEffect = sideEffect){
+            is BattleSideEffect.ShowMessage -> {
+                scaffoldState.snackbarHostState.showSnackbar(lSideEffect.message)
+            }
+            null -> {}
+        }
+    }
     val state by remember { battleVM.state }
     var isDisplayDialogCancelGame by remember {
         mutableStateOf(false)
     }
     BackHandler(
-        enabled = state !is BattleState.ModuleSelection &&
-                state !is BattleState.Loading
+        enabled = state !is BattleState.ModuleSelection
+                && state !is BattleState.Loading
+                && state !is BattleState.FindingEnemy
+                && state !is  BattleState.WaitingFriend
     ){
         if (state !is BattleState.FindingEnemy){
             isDisplayDialogCancelGame = true
         }
     }
-    when(state){
-        BattleState.FindingEnemy, BattleState.WaitingFriend ->
-            FindingEnemy(
-                isWaitFriend = state is BattleState.WaitingFriend,
-                exit = {
-                    battleVM.onEvent(BattleEvent.Cancel)
-                    goToBack()
+    Scaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = Color.Transparent,
+    ) {
+        when(state){
+            BattleState.FindingEnemy, BattleState.WaitingFriend ->
+                FindingEnemy(
+                    isWaitFriend = state is BattleState.WaitingFriend,
+                    exit = {
+                        battleVM.onEvent(BattleEvent.Cancel)
+                        goToBack()
+                    }
+                )
+            is BattleState.Loading -> Loading(
+                loadState = (state as BattleState.Loading).load
+            )
+            is BattleState.ModuleSelection -> ModuleSelection(
+                modules = (state as BattleState.ModuleSelection).modules,
+                onSelection = {module-> battleVM.onEvent(BattleEvent.ChosenModule(module)) }
+            )
+            is BattleState.QuestionForm -> Question(
+                questionForm = state as BattleState.QuestionForm,
+                onAnswer = { answer ->
+                    battleVM.onEvent(BattleEvent.Reply(answer))
                 }
             )
-        is BattleState.Loading -> Loading(
-            loadState = (state as BattleState.Loading).load
-        )
-        is BattleState.ModuleSelection -> ModuleSelection(
-            modules = (state as BattleState.ModuleSelection).modules,
-            onSelection = {module-> battleVM.onEvent(BattleEvent.ChosenModule(module)) }
-        )
-        is BattleState.QuestionForm -> Question(
-            questionForm = state as BattleState.QuestionForm,
-            onAnswer = { answer ->
-                battleVM.onEvent(BattleEvent.Reply(answer))
+            is BattleState.ViewRatingGame -> RatingGame(
+                statusGame = (state as BattleState.ViewRatingGame).statusGame
+            ){
+                battleVM.onEvent(BattleEvent.Cancel)
+                goToBack()
             }
-        )
-        is BattleState.ViewRatingGame -> RatingGame(
-            statusGame = (state as BattleState.ViewRatingGame).statusGame
-        ){
-            battleVM.onEvent(BattleEvent.Cancel)
-            goToBack()
         }
     }
     if (isDisplayDialogCancelGame){
@@ -77,7 +97,7 @@ fun BattleScreen(
                 modifier = Modifier
                     .fillMaxWidth(.9f)
                     .background(Color(0xFF070E24), RoundedCornerShape(10.dp))
-                    .padding( top =  20.dp , bottom = 10.dp)
+                    .padding(top = 20.dp, bottom = 10.dp)
                     .padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {

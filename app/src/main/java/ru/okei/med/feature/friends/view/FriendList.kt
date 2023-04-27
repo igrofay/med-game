@@ -37,7 +37,9 @@ fun FriendList(
             contentColor = White95,
             edgePadding = 12.dp,
             divider = {},
-            modifier = Modifier.clip(RoundedCornerShape(10.dp))
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .clip(RoundedCornerShape(10.dp))
         ) {
             keys.forEachIndexed { index, status ->
                 Tab(
@@ -64,7 +66,7 @@ fun FriendList(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 12.dp),
+                contentPadding = PaddingValues(vertical = 12.dp, horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 items(

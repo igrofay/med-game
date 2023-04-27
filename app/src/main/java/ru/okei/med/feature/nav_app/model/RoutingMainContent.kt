@@ -14,8 +14,9 @@ sealed class RoutingMainContent(
     ){
         fun argRoute(
             typeBattle: String = "{typeBattle}",
-            emailFriend: String? = "{emailFriend}"
-        )= "$route/$typeBattle?emailFriend=$emailFriend"
+            emailFriend: String? = "{emailFriend}",
+            tokenRoom: String? = "{tokenRoom}",
+        )= "$route/$typeBattle?emailFriend=$emailFriend&tokenRoom=$tokenRoom"
     }
     object EditProfile: RoutingMainContent(
         route = "edit_profile"

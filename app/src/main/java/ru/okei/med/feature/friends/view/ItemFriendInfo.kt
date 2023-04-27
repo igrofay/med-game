@@ -72,7 +72,8 @@ fun ItemFriendInfo(
             sizeIcon,
             borderStroke,
             sizeMainText,
-            sizeSideText
+            sizeSideText,
+            shape,
         )
         if(rotateX>=90f){
             SettingsItem(
@@ -94,9 +95,10 @@ fun ItemMainInfo(
     borderStroke: BorderStroke,
     sizeMainText: TextUnit,
     sizeSideText: TextUnit,
+    shape: Shape,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clip(shape),
         verticalAlignment = Alignment.CenterVertically
     ){
         GlideImage(
@@ -176,7 +178,7 @@ fun SettingsItem(
     ) {
         if (friendStatus == FriendInfo.FriendStatus.Friend){
             Row(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(0.7f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
@@ -202,6 +204,7 @@ fun SettingsItem(
                 }
             }
             Spacer(modifier = Modifier
+                .padding(start = 6.dp, end = 10.dp)
                 .width(1.dp)
                 .fillMaxHeight(0.9f)
                 .background(Color.White.copy(0.6f))
@@ -219,7 +222,8 @@ fun SettingsItem(
                         fontSize = settingsSiteText,
                         fontWeight = FontWeight.W600,
                         color = White95,
-                        fontFamily = montserratFont
+                        fontFamily = montserratFont,
+                        modifier = Modifier.weight(1f)
                     )
                 }
                 FriendInfo.FriendStatus.ApplicationSent -> {

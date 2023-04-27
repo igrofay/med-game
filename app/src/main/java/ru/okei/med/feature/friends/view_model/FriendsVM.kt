@@ -63,7 +63,6 @@ class FriendsVM @Inject constructor(
                     actionOnFriendUseCase
                         .execute(event.email,ActionOnFriendUseCase.Action.AcceptRequest)
                         .onSuccess {
-
                             onEvent(FriendsEvent.RetryRequest)
                         }
                 }
@@ -90,7 +89,8 @@ class FriendsVM @Inject constructor(
                 }
             }
             FriendsEvent.GetFriendList -> getFriendList()
-            is FriendsEvent.FightFriendRequest -> TODO()
+            is FriendsEvent.FightFriendRequest -> _sideEffect.value = FriendsSideEffect.GoToFightWithFriend(event.email)
+            FriendsEvent.ClearSide ->_sideEffect.value = null
         }
     }
 

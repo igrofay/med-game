@@ -105,10 +105,19 @@ class FightWithEnemyInteractor(
         }finally {
             close()
             socketSession = null
-            if (tokenRoom.isNotBlank()){
+            if (tokenRoom == "429"){
+                fightCanceled.invoke()
+            }else if (tokenRoom.isNotBlank()){
                 enemyFound.invoke()
                 scope.launch { connectionRoom() }
             }
+        }
+    }
+
+    fun searchRoom(tokenRoom: String){
+        scope.launch {
+            this@FightWithEnemyInteractor.tokenRoom = tokenRoom
+            connectionRoom()
         }
     }
 
