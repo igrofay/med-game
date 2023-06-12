@@ -31,7 +31,7 @@ fun ContentProfile(
     ){
         Header(label = "Профиль")
         ProfileInfo(profileBody,onChange)
-        Header(label = "Кафедра")
+//        Header(label = "Кафедра")
 //        DepartmentInfo(label = profileBody.department)
     }
 }
